@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aniplix - Anime Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --primary-color: #E1306C;
@@ -23,7 +24,6 @@
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --success-color: #4CAF50;
             --warning-color: #FFC107;
-            --font-family-main: 'Poppins', sans-serif;
         }
 
         * {
@@ -35,7 +35,7 @@
         body {
             background: var(--dark-bg);
             min-height: 100vh;
-            font-family: var(--font-family-main);
+            font-family: 'Poppins', sans-serif;
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
@@ -63,13 +63,40 @@
             animation: float 15s infinite ease-in-out;
         }
 
-        .circle-1 { width: 300px; height: 300px; background: #405DE6; top: 20%; left: 10%; animation-delay: 0s; }
-        .circle-2 { width: 400px; height: 400px; background: #C13584; top: 60%; left: 70%; animation-delay: 3s; }
-        .circle-3 { width: 250px; height: 250px; background: #FD1D1D; top: 30%; left: 50%; animation-delay: 6s; }
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: #405DE6;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: #C13584;
+            top: 60%;
+            left: 70%;
+            animation-delay: 3s;
+        }
+
+        .circle-3 {
+            width: 250px;
+            height: 250px;
+            background: #FD1D1D;
+            top: 30%;
+            left: 50%;
+            animation-delay: 6s;
+        }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-50px) translateX(50px); }
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-50px) translateX(50px);
+            }
         }
 
         .header {
@@ -80,16 +107,24 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Space between logo and tagline */
+        }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
             transition: var(--transition);
-            text-decoration: none; 
+            text-decoration: none;
         }
 
-        .logo:hover { transform: scale(1.02); }
+        .logo:hover {
+            transform: scale(1.02);
+        }
 
         .logo-icon {
             font-size: 2.2rem;
@@ -100,8 +135,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
 
         .logo-text {
@@ -112,12 +151,11 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 2px 10px rgba(225, 48, 108, 0.3);
         }
-        
+
         .header-actions {
             display: flex;
+            gap: 15px;
             align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
         }
 
         .tagline {
@@ -129,34 +167,26 @@
             border: 1px solid var(--glass-border);
         }
 
-        .random-anime-btn-header, .back-to-search-btn {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 10px 20px;
+        .nav-button {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            padding: 8px 15px;
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .random-anime-btn-header:hover, .back-to-search-btn:hover {
+        .nav-button:hover {
             background: var(--primary-color);
-            color: var(--text-primary);
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(225, 48, 108, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(225, 48, 108, 0.3);
-        }
-        
-        .random-anime-btn-header i, .back-to-search-btn i {
-            font-size: 1rem;
         }
 
         .main-container {
@@ -173,10 +203,20 @@
             transition: var(--transition);
         }
 
-        .main-container:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); }
+        .main-container:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
 
-        .download-form { display: flex; flex-direction: column; gap: 25px; }
-        .input-group { position: relative; }
+        .download-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
 
         .url-input {
             width: 100%;
@@ -196,7 +236,10 @@
             box-shadow: 0 0 0 3px rgba(225, 48, 108, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .url-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
+        .url-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
 
         .download-btn {
             background: var(--gradient);
@@ -234,102 +277,123 @@
             transform: translateY(-3px);
             box-shadow: 0 7px 20px rgba(225, 48, 108, 0.4);
         }
-        .download-btn:hover::before { left: 100%; }
-        .download-btn:active { transform: translateY(0); }
 
-        .results { margin-top: 40px; display: none; }
-        .results.active { display: block; animation: fadeIn 0.5s ease; }
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .media-card {
             background: var(--light-bg);
             border-radius: 18px;
-            overflow: hidden; 
+            overflow: hidden;
             display: flex;
-            flex-direction: column; 
-            align-items: center; 
+            flex-direction: column; /* Default to column for smaller screens */
+            gap: 20px; /* Space between thumbnail and info */
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
             transition: var(--transition);
-            padding: 30px;
-            text-align: center; 
+            padding: 20px; /* Adjusted padding */
+            text-align: left; /* Align text to left for info */
         }
 
-        .media-card-placeholder {
-            color: var(--text-secondary);
-            font-style: italic;
-            padding: 20px;
-            text-align: center;
+        .media-snapshot-container {
+            flex-shrink: 0; /* Prevent shrinking */
+            display: flex;
+            justify-content: center; /* Center image if it's smaller than container */
         }
-
+        
         .media-snapshot {
-            width: 150px;
-            height: 225px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 20px; 
+            width: 150px; /* Fixed width for thumbnail */
+            height: 225px; /* Fixed height for thumbnail */
+            object-fit: cover; /* Cover the area, cropping if necessary */
+            border-radius: 12px;
             border: 2px solid var(--glass-border);
-            background-color: var(--darker-bg); 
+            transition: transform 0.3s ease;
         }
-
+        
+        .media-snapshot:hover {
+            transform: scale(1.05);
+        }
+        
         .media-info {
             display: flex;
             flex-direction: column;
-            gap: 15px; 
-            width: 100%; 
-            text-align: center;
+            gap: 12px; /* Smaller gap for info items */
+            flex-grow: 1; /* Allow info to take remaining space */
         }
 
         .media-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem; /* Slightly smaller title for balance */
             font-weight: 600;
-            line-height: 1.4;
+            line-height: 1.3;
+            margin-bottom: 5px;
+            color: var(--text-primary);
         }
 
-        .media-meta {
-            display: flex;
-            flex-wrap: wrap; 
-            align-items: center;
-            justify-content: center;
-            gap: 10px 20px; 
-            color: var(--text-secondary);
+        .media-episode {
             font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.2);
+            padding: 3px 8px;
+            border-radius: 5px;
+            align-self: flex-start; /* Align to start of flex container */
         }
-
-        .meta-item { display: flex; align-items: center; gap: 5px; }
 
         .download-options-container {
-            margin-top: 20px;
-            width: 100%;
+            margin-top: 10px;
         }
-
-        .download-links-section { margin-bottom: 15px; }
+        
+        .download-links-section {
+            margin-bottom: 15px;
+        }
+        
         .links-header {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
             color: var(--accent-color);
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+            margin-bottom: 8px;
             border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 5px;
         }
 
         .download-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
+            gap: 10px;
         }
 
         .download-option {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--glass-border);
             color: var(--text-primary);
-            padding: 10px 18px; 
-            border-radius: 8px; 
-            font-size: 0.9rem; 
+            padding: 10px 15px; /* Slightly smaller padding */
+            border-radius: 8px; /* Slightly smaller radius */
+            font-size: 0.9rem; /* Slightly smaller font */
             cursor: pointer;
             transition: var(--transition);
             display: flex;
@@ -345,219 +409,550 @@
             box-shadow: 0 4px 10px rgba(225, 48, 108, 0.2);
         }
 
-        .download-option i { font-size: 1rem; }
-        .no-links { color: var(--text-secondary); font-style: italic; }
-
-        .loading {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 40px auto; 
-            width: 100%;
-            min-height: 200px; 
+        .download-option i {
+            font-size: 1rem; /* Adjusted icon size */
+        }
+        
+        .no-links {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.9rem;
         }
 
-        .loading.active { display: flex; }
+        #mediaCardPlaceholder {
+            color: var(--text-secondary);
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+
+        /* Loading state */
+        .loading {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center loader content */
+            width: 100%;
+            min-height: 200px; /* Ensure some space for the loader */
+            margin: 40px 0;
+        }
+
+        .loading.active {
+            display: flex;
+        }
 
         .loader {
-            --background: linear-gradient(135deg, #23C4F8, #275EFE);
-            --shadow: rgba(39, 94, 254, 0.28);
-            --page: rgba(255, 255, 255, 0.36);
-            --page-fold: rgba(255, 255, 255, 0.52);
-            --duration: 3s;
-            width: 200px;
-            height: 140px;
+            --background: linear-gradient(135deg, #23C4F8, #275EFE); /* Adjusted to Aniplix colors */
+            --shadow: rgba(39, 94, 254, 0.28); /* Adjusted shadow */
+            --text: var(--text-secondary); /* Use theme text color */
+            --page: var(--glass-border); /* Page color from theme */
+            --page-fold: rgba(255, 255, 255, 0.2); /* Lighter fold */
+            --duration: 2s; /* Slightly faster animation */
+            width: 150px; /* Smaller loader */
+            height: 105px; /* Adjusted height */
             position: relative;
-            margin-bottom: 20px; 
+            margin-bottom: 20px; /* Space between loader and text */
         }
-        .loader:before, .loader:after {
-            --r: -6deg; content: ""; position: absolute; bottom: 8px; width: 120px;
-            top: 80%; box-shadow: 0 16px 12px var(--shadow); transform: rotate(var(--r));
+
+        .loader:before,
+        .loader:after {
+            --r: -6deg;
+            content: "";
+            position: absolute;
+            bottom: 6px; /* Adjusted position */
+            width: 90px;  /* Adjusted width */
+            top: 80%;
+            box-shadow: 0 12px 10px var(--shadow); /* Adjusted shadow */
+            transform: rotate(var(--r));
         }
-        .loader:before { left: 4px; }
-        .loader:after { --r: 6deg; right: 4px; }
+
+        .loader:before {
+            left: 3px;
+        }
+
+        .loader:after {
+            --r: 6deg;
+            right: 3px;
+        }
+
         .loader div {
-            width: 100%; height: 100%; border-radius: 13px; position: relative; z-index: 1;
-            perspective: 600px; box-shadow: 0 4px 6px var(--shadow); background-image: var(--background);
+            width: 100%;
+            height: 100%;
+            border-radius: 10px; /* Smaller radius */
+            position: relative;
+            z-index: 1;
+            perspective: 600px;
+            box-shadow: 0 3px 5px var(--shadow); /* Adjusted shadow */
+            background-image: var(--gradient); /* Use Aniplix gradient */
         }
-        .loader div ul { margin: 0; padding: 0; list-style: none; position: relative; }
+
+        .loader div ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            position: relative;
+        }
+
         .loader div ul li {
-            --r: 180deg; --o: 0; --c: var(--page);
-            position: absolute; top: 10px; left: 10px; transform-origin: 100% 50%;
-            color: var(--c); opacity: var(--o); transform: rotateY(var(--r));
+            --r: 180deg;
+            --o: 0;
+            --c: var(--page);
+            position: absolute;
+            top: 7.5px; /* Adjusted position */
+            left: 7.5px; /* Adjusted position */
+            transform-origin: 100% 50%;
+            color: var(--c);
+            opacity: var(--o);
+            transform: rotateY(var(--r));
             animation: var(--duration) ease infinite;
         }
-        .loader div ul li:nth-child(2) { --c: var(--page-fold); animation-name: page-2; }
-        .loader div ul li:nth-child(3) { --c: var(--page-fold); animation-name: page-3; }
-        .loader div ul li:nth-child(4) { --c: var(--page-fold); animation-name: page-4; }
-        .loader div ul li:nth-child(5) { --c: var(--page-fold); animation-name: page-5; }
-        .loader div ul li svg { width: 90px; height: 120px; display: block; }
-        .loader div ul li:first-child { --r: 0deg; --o: 1; }
-        .loader div ul li:last-child { --o: 1; }
 
-        .loading-text-custom { 
+        .loader div ul li:nth-child(2) {
+            --c: var(--page-fold);
+            animation-name: page-2;
+        }
+
+        .loader div ul li:nth-child(3) {
+            --c: var(--page-fold);
+            animation-name: page-3;
+        }
+
+        .loader div ul li:nth-child(4) {
+            --c: var(--page-fold);
+            animation-name: page-4;
+        }
+
+        .loader div ul li:nth-child(5) {
+            --c: var(--page-fold);
+            animation-name: page-5;
+        }
+
+        .loader div ul li svg {
+            width: 67.5px; /* Adjusted SVG size */
+            height: 90px;  /* Adjusted SVG size */
+            display: block;
+        }
+
+        .loader div ul li:first-child {
+            --r: 0deg;
+            --o: 1;
+        }
+
+        .loader div ul li:last-child {
+            --o: 1;
+        }
+        .loading-text-custom { /* Renamed for clarity */
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-align: center;
-            margin-top: 10px; 
+            margin-top: 10px; /* Ensure some space if loader is small */
         }
-        @keyframes page-2 { 0% {transform: rotateY(180deg); opacity: 0;} 20% {opacity: 1;} 35%, 100% {opacity: 0;} 50%, 100% {transform: rotateY(0deg);} }
-        @keyframes page-3 { 15% {transform: rotateY(180deg); opacity: 0;} 35% {opacity: 1;} 50%, 100% {opacity: 0;} 65%, 100% {transform: rotateY(0deg);} }
-        @keyframes page-4 { 30% {transform: rotateY(180deg); opacity: 0;} 50% {opacity: 1;} 65%, 100% {opacity: 0;} 80%, 100% {transform: rotateY(0deg);} }
-        @keyframes page-5 { 45% {transform: rotateY(180deg); opacity: 0;} 65% {opacity: 1;} 80%, 100% {opacity: 0;} 95%, 100% {transform: rotateY(0deg);} }
 
+
+        @keyframes page-2 {
+            0% {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            35%,
+            100% {
+                opacity: 0;
+            }
+
+            50%,
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        @keyframes page-3 {
+            15% {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+
+            35% {
+                opacity: 1;
+            }
+
+            50%,
+            100% {
+                opacity: 0;
+            }
+
+            65%,
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        @keyframes page-4 {
+            30% {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            65%,
+            100% {
+                opacity: 0;
+            }
+
+            80%,
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        @keyframes page-5 {
+            45% {
+                transform: rotateY(180deg);
+                opacity: 0;
+            }
+
+            65% {
+                opacity: 1;
+            }
+
+            80%,
+            100% {
+                opacity: 0;
+            }
+
+            95%,
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+
+        /* Error state */
         .error-message {
-            display: none; background: rgba(225, 48, 108, 0.1); border: 1px solid var(--primary-color);
-            color: var(--text-primary); padding: 18px; border-radius: 15px; margin-top: 25px;
+            display: none;
+            background: rgba(225, 48, 108, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--text-primary);
+            padding: 18px;
+            border-radius: 15px;
+            margin-top: 25px;
             text-align: center;
+            animation: shake 0.5s ease;
         }
-        .error-message.active { display: block; animation: fadeIn 0.5s ease, shake 0.5s ease; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
-        }
-        .error-icon { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
 
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
-        .feature-card {
-            background: var(--light-bg); border-radius: 15px; padding: 25px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            gap: 18px; transition: var(--transition); border: 1px solid transparent;
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-5px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(5px);
+            }
         }
+
+        .error-message.active {
+            display: block;
+            animation: fadeIn 0.5s ease, shake 0.5s ease;
+        }
+
+        .error-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* Features section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 18px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
         .feature-card:hover {
-            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             border-color: var(--glass-border);
         }
+
         .feature-icon {
-            font-size: 2.5rem; color: var(--primary-color); background: rgba(225, 48, 108, 0.1);
-            width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            background: rgba(225, 48, 108, 0.1);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
         }
-        .feature-title { font-size: 1.2rem; font-weight: 600; }
-        .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
 
-        .faq { margin-top: 60px; }
-        .faq-item { margin-bottom: 15px; border-radius: 12px; overflow: hidden; background: var(--light-bg); }
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* FAQ section */
+        .faq {
+            margin-top: 60px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--light-bg);
+        }
+
         .faq-question {
-            padding: 18px 25px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary);
-            font-weight: 500; cursor: pointer; display: flex; justify-content: space-between;
-            align-items: center; transition: var(--transition);
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
         }
-        .faq-question:hover { background: rgba(255, 255, 255, 0.08); }
-        .faq-question::after { content: '+'; font-size: 1.3rem; transition: var(--transition); }
-        .faq-question.active::after { content: '-'; }
-        .faq-answer {
-            padding: 0 25px; max-height: 0; overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease; color: var(--text-secondary);
-            font-size: 0.95rem; line-height: 1.6;
-        }
-        .faq-question.active + .faq-answer { padding: 18px 25px; max-height: 500px; }
 
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.3rem;
+            transition: var(--transition);
+        }
+
+        .faq-question.active::after {
+            content: '-';
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .faq-question.active+.faq-answer {
+            padding: 18px 25px;
+            max-height: 500px;
+        }
+
+        /* Footer */
         .footer {
-            margin-top: 80px; text-align: center; color: var(--text-secondary); font-size: 0.95rem;
-            padding: 30px 0; position: relative;
+            margin-top: 80px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding: 30px 0;
+            position: relative;
         }
+
         .footer::before {
-            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 200px; height: 2px; background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--glass-border), transparent);
         }
-        .creator { color: var(--accent-color); text-decoration: none; transition: var(--transition); font-weight: 500; }
-        .creator:hover { text-decoration: underline; color: var(--primary-color); }
-        .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+
+        .creator {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .creator:hover {
+            text-decoration: underline;
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
         .social-link {
-            color: var(--text-secondary); font-size: 1.2rem; transition: var(--transition);
-            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
         }
+
         .social-link:hover {
-            color: var(--primary-color); background: rgba(225, 48, 108, 0.1);
+            color: var(--primary-color);
+            background: rgba(225, 48, 108, 0.1);
             transform: translateY(-3px);
         }
 
-        .tooltip { position: relative; display: inline-block; }
-        .tooltip .tooltip-text {
-            visibility: hidden; width: 200px; background-color: var(--light-bg); color: var(--text-primary);
-            text-align: center; border-radius: 6px; padding: 10px; position: absolute; z-index: 1;
-            bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;
-            font-size: 0.85rem; border: 1px solid var(--glass-border); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
-        .tooltip .tooltip-text::after {
-            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
-            border-width: 5px; border-style: solid; border-color: var(--light-bg) transparent transparent transparent;
-        }
-        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
 
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--light-bg) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @media (min-width: 769px) {
+            .media-card {
+                flex-direction: row; /* Side-by-side on larger screens */
+                align-items: flex-start; /* Align items to the top */
+            }
+            .media-snapshot-container {
+                justify-content: flex-start; /* Align snapshot to left */
+            }
+        }
+
+
+        /* Responsive adjustments */
         @media (max-width: 992px) {
-            .main-container { padding: 30px; }
-            .header { flex-direction: column; gap: 20px; text-align: center; }
-            .logo { justify-content: center; }
-            .header-actions { justify-content: center; }
+            .main-container {
+                padding: 30px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px; /* Reduced gap */
+                text-align: center;
+            }
+            .logo-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+            .header-actions {
+                margin-top: 10px;
+                flex-wrap: wrap; /* Allow buttons to wrap */
+                justify-content: center;
+            }
         }
 
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .main-container { padding: 20px; }
-            .logo-text { font-size: 1.5rem; }
-            .download-btn { padding: 16px 25px; font-size: 1rem;}
-            .url-input { padding: 16px 20px; font-size: 1rem; }
-            
-            .media-card {
-                flex-direction: column; 
-                align-items: center; 
+            .main-container {
+                padding: 20px;
             }
-            .media-snapshot {
-                width: 180px; 
-                height: auto; 
-                aspect-ratio: 2 / 3; 
-                margin-bottom: 20px; 
-                margin-right: 0; 
-            }
-            .media-info {
-                width: 100%;
-                text-align: center; 
-            }
-            .media-title { font-size: 1.2rem; }
-            .links-header { font-size: 1rem; }
-            .download-option { font-size: 0.85rem; padding: 8px 15px; }
 
-            .feature-card { padding: 20px; }
-            .feature-title { font-size: 1.1rem; }
-            .faq-question { padding: 15px 20px; }
-            .faq-answer { padding: 0 20px; }
-            .faq-question.active + .faq-answer { padding: 15px 20px; }
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .download-btn {
+                padding: 16px 25px;
+                font-size: 1rem;
+            }
+
+            .media-title {
+                font-size: 1.1rem;
+            }
+            .url-input {
+                font-size: 1rem;
+                padding: 16px 20px;
+            }
         }
-
-        @media (min-width: 769px) { 
-            .media-card {
-                flex-direction: row; 
-                text-align: left; 
-                align-items: flex-start; 
-                gap: 25px; 
+         @media (max-width: 480px) {
+            .nav-button {
+                font-size: 0.8rem;
+                padding: 6px 12px;
             }
-            .media-snapshot {
-                width: 150px;
-                height: 225px;
-                margin-bottom: 0; 
-                flex-shrink: 0; 
-            }
-            .media-info {
-                flex: 1; 
-                text-align: left; 
-            }
-            .media-meta {
-                justify-content: flex-start; 
-            }
-            .download-options {
-                justify-content: flex-start; 
-            }
-            .links-header {
-                text-align: left;
+            .tagline {
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-animation">
         <div class="bg-circle circle-1"></div>
@@ -566,15 +961,19 @@
     </div>
 
     <header class="header">
-        <a href="/anime.html" class="logo">
-            <i class="fas fa-film logo-icon"></i>
-            <span class="logo-text">Aniplix</span>
-        </a>
+        <div class="logo-container">
+            <a href="/anime.html" class="logo">
+                <i class="fas fa-film logo-icon"></i>
+                <span class="logo-text">Aniplix</span>
+            </a>
+            <span class="tagline">Your Ultimate Anime Hub</span>
+        </div>
         <div class="header-actions">
-            <span class="tagline">Your Gateway to Anime</span>
-            <a href="/random" class="random-anime-btn-header tooltip">
+            <a href="/random" class="nav-button">
                 <i class="fas fa-random"></i> Random Anime
-                <span class="tooltip-text">Discover a random anime!</span>
+            </a>
+            <a href="/new" class="nav-button">
+                <i class="fas fa-fire"></i> New Releases
             </a>
         </div>
     </header>
@@ -582,14 +981,15 @@
     <main class="main-container">
         <form id="searchForm" class="download-form">
             <div class="input-group">
-                <input type="text" id="animename" class="url-input" placeholder="e.g., Solo Leveling 3 or Naruto S2 epi 10" required>
+                <input type="text" id="animename" class="url-input" placeholder="e.g., Solo Leveling 1 or Naruto Shippuden S2 epi 10"
+                    required>
             </div>
             <button type="submit" class="download-btn">
                 <i class="fas fa-search"></i> Search Anime
             </button>
         </form>
 
-        <div class="loading" id="loadingState">
+        <div id="loadingState" class="loading">
             <div class="loader">
                 <div>
                     <ul>
@@ -602,36 +1002,36 @@
                     </ul>
                 </div>
             </div>
-            <p class="loading-text-custom">Loading Anime...</p>
+             <span class="loading-text-custom">Fetching anime details...</span>
         </div>
 
-        <div id="errorMsg" class="error-message">
-            <i class="fas fa-exclamation-triangle error-icon"></i>
-            <span id="errorText"></span>
-        </div>
-
-        <div class="results" id="resultsSection">
+        <div id="results" class="results">
             <div class="media-card" id="mediaCard">
-                <p class="media-card-placeholder" id="mediaCardPlaceholder">Enter an anime name and episode to search.</p>
-                <!-- Content will be injected here by JavaScript -->
+                <p id="mediaCardPlaceholder">Search for an anime to see details here.</p>
+                <!-- Results will be injected here by JavaScript -->
             </div>
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-triangle error-icon"></i>
+            <p id="errorText">Something went wrong. Please try again.</p>
         </div>
 
         <section class="features">
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                 <h3 class="feature-title">Lightning Fast</h3>
-                <p class="feature-desc">Get your anime download links in seconds. Our optimized system ensures quick results.</p>
+                <p class="feature-desc">Get your anime download links in seconds. Our optimized system ensures quick searches and results.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-link"></i></div>
                 <h3 class="feature-title">Multiple Qualities</h3>
-                <p class="feature-desc">Choose from various download qualities (360p, 720p, 1080p) for both sub and dub.</p>
+                <p class="feature-desc">Choose from various download qualities (360p, 720p, 1080p) for both subbed and dubbed versions.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3 class="feature-title">Reliable & Secure</h3>
-                <p class="feature-desc">We strive to provide working links. Your searches are private and secure.</p>
+                <div class="feature-icon"><i class="fas fa-film"></i></div>
+                <h3 class="feature-title">Vast Library</h3>
+                <p class="feature-desc">Access a wide range of anime series and episodes directly through our smart search.</p>
             </div>
         </section>
 
@@ -640,32 +1040,32 @@
             <div class="faq-item">
                 <div class="faq-question">Is Aniplix free to use?</div>
                 <div class="faq-answer">
-                    <p>Yes, Aniplix is completely free to use for searching anime download links.</p>
+                    <p>Yes, Aniplix is completely free to use for searching anime and finding download links.</p>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">Where do the download links come from?</div>
+                <div class="faq-question">How does Aniplix find download links?</div>
                 <div class="faq-answer">
-                    <p>Aniplix fetches data from publicly available APIs. We do not host any content ourselves.</p>
+                    <p>Aniplix uses a secure backend API to search for publicly available anime information and download links from various sources on the internet.</p>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">What if a link is broken?</div>
+                <div class="faq-question">Are the downloads direct?</div>
                 <div class="faq-answer">
-                    <p>We try our best to fetch working links. However, link availability can change. If you find a broken link, try a different quality or source if available.</p>
+                    <p>Aniplix provides links to external download pages. We do not host any files ourselves. The download process depends on the source site.</p>
                 </div>
             </div>
-             <div class="faq-item">
-                <div class="faq-question">How does the 'Random Anime' feature work?</div>
+            <div class="faq-item">
+                <div class="faq-question">What if I can't find an anime?</div>
                 <div class="faq-answer">
-                    <p>The 'Random Anime' feature scrapes information from AnimeHeaven to suggest a random anime for you to discover.</p>
+                    <p>Our API is constantly updated, but some niche or very new anime might not be available immediately. Try varying your search term or checking back later. Ensure your spelling is correct.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--primary-light);"></i> by <a href="https://github.com/lakshayislam" target="_blank" class="creator">BLUE DEMON</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="#" class="creator">Blue Demon</a>. All rights reserved.</p>
         <div class="social-links">
             <a href="#" class="social-link tooltip"><i class="fab fa-github"></i><span class="tooltip-text">GitHub</span></a>
             <a href="#" class="social-link tooltip"><i class="fab fa-twitter"></i><span class="tooltip-text">Twitter</span></a>
@@ -674,17 +1074,202 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function () {
             const searchForm = document.getElementById('searchForm');
             const animenameInput = document.getElementById('animename');
-            const loadingState = document.getElementById('loadingState');
-            const errorMsgDiv = document.getElementById('errorMsg');
-            const errorTextSpan = document.getElementById('errorText');
-            const resultsSection = document.getElementById('resultsSection');
+            const resultsDiv = document.getElementById('results');
             const mediaCard = document.getElementById('mediaCard');
+            const loadingState = document.getElementById('loadingState');
+            const errorMessageDiv = document.getElementById('errorMessage');
+            const errorTextP = document.getElementById('errorText');
             const mediaCardPlaceholder = document.getElementById('mediaCardPlaceholder');
 
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            searchForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const query = animenameInput.value.trim();
+
+                resultsDiv.classList.remove('active');
+                errorMessageDiv.classList.remove('active');
+                mediaCard.innerHTML = ''; // Clear previous results
+                if (mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'none';
+                loadingState.classList.add('active');
+
+                if (!query) {
+                    showError('Please enter an anime name and episode.');
+                    return;
+                }
+                
+                const match = query.match(/^(.*?)(?:\s+s(?:eason)?)?(?:\s+(\d+))?(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
+                
+                let animeNameForAPI;
+                let episodeForAPI;
+
+                if (match) {
+                    let potentialAnimeName = match[1].trim();
+                    let seasonNumber = match[2];
+                    let episodeNumber = match[3];
+
+                    if (seasonNumber) {
+                        animeNameForAPI = `${potentialAnimeName} Season ${seasonNumber}`;
+                    } else {
+                        animeNameForAPI = potentialAnimeName;
+                    }
+                    episodeForAPI = episodeNumber;
+                } else {
+                     // Fallback for simpler "Anime Name Episode" format
+                    const simpleMatch = query.match(/^(.*?)\s+(\d+)$/i);
+                    if (simpleMatch) {
+                        animeNameForAPI = simpleMatch[1].trim();
+                        episodeForAPI = simpleMatch[2];
+                    } else {
+                        showError("Invalid format. Use 'Anime Name Episode' or 'Anime Name S1 epi1'.");
+                        return;
+                    }
+                }
+                
+                if (!animeNameForAPI) {
+                    showError('Anime name cannot be empty. Please check your input.');
+                    loadingState.classList.remove('active');
+                    return;
+                }
+
+                if (!episodeForAPI || parseInt(episodeForAPI, 10) <= 0) {
+                    showError('Please enter a valid positive episode number.');
+                    loadingState.classList.remove('active');
+                    return;
+                }
+
+
+                try {
+                    const response = await fetch(`/api/search-anime?animename=${encodeURIComponent(animeNameForAPI)}&episode=${encodeURIComponent(episodeForAPI)}`);
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ message: `Error ${response.status}: ${response.statusText}` }));
+                        throw new Error(errorData.message || `Network response was not ok: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    displayResults(data);
+
+                } catch (error) {
+                    console.error('Search error:', error);
+                    showError(error.message || 'Failed to fetch anime details. Please try again.');
+                } finally {
+                    loadingState.classList.remove('active');
+                }
+            });
+
+            function displayResults(data) {
+                mediaCard.innerHTML = ''; // Clear previous content or placeholder
+
+                const snapshotContainer = document.createElement('div');
+                snapshotContainer.className = 'media-snapshot-container';
+                
+                const snapshotImg = document.createElement('img');
+                snapshotImg.className = 'media-snapshot';
+                snapshotImg.alt = data.title ? `Snapshot of ${data.title}` : 'Anime Snapshot';
+                snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
+                snapshotImg.setAttribute('data-ai-hint', 'anime art');
+
+
+                if (data.snapshot) {
+                    snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}`;
+                    console.log("Attempting to load snapshot via proxy:", snapshotImg.src);
+                } else {
+                    snapshotImg.src = 'https://placehold.co/150x225.png'; 
+                    console.log("No snapshot URL provided, using placeholder.");
+                }
+                snapshotImg.onerror = function() {
+                    console.error("Failed to load snapshot:", this.src, "Falling back to placeholder.");
+                    this.src = 'https://placehold.co/150x225.png';
+                     this.onerror = null; 
+                };
+                snapshotContainer.appendChild(snapshotImg);
+                mediaCard.appendChild(snapshotContainer);
+
+                const mediaInfoDiv = document.createElement('div');
+                mediaInfoDiv.className = 'media-info';
+
+                const titleH3 = document.createElement('h3');
+                titleH3.className = 'media-title';
+                titleH3.textContent = data.title || 'Title Not Available';
+                mediaInfoDiv.appendChild(titleH3);
+
+                const episodeP = document.createElement('p');
+                episodeP.className = 'media-episode';
+                episodeP.textContent = data.episode ? `Episode ${data.episode}` : 'Episode Info Not Available';
+                mediaInfoDiv.appendChild(episodeP);
+                
+                const downloadsContainer = document.createElement('div');
+                downloadsContainer.className = 'download-options-container';
+
+                if (data.links) {
+                    if (data.links.sub && Object.keys(data.links.sub).length > 0) {
+                        downloadsContainer.appendChild(createLinksSection('Subtitled Downloads', data.links.sub));
+                    } else {
+                         downloadsContainer.appendChild(createNoLinksMessage('No subtitled download links available.'));
+                    }
+                    if (data.links.dub && Object.keys(data.links.dub).length > 0) {
+                        downloadsContainer.appendChild(createLinksSection('Dubbed Downloads', data.links.dub));
+                    } else {
+                        downloadsContainer.appendChild(createNoLinksMessage('No dubbed download links available.'));
+                    }
+                } else {
+                    downloadsContainer.appendChild(createNoLinksMessage('No download links found.'));
+                }
+                mediaInfoDiv.appendChild(downloadsContainer);
+                mediaCard.appendChild(mediaInfoDiv);
+                resultsDiv.classList.add('active');
+            }
+
+            function createLinksSection(headerText, linksObject) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'download-links-section';
+
+                const header = document.createElement('h4');
+                header.className = 'links-header';
+                header.textContent = headerText;
+                sectionDiv.appendChild(header);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'download-options';
+
+                for (const quality in linksObject) {
+                    if (linksObject.hasOwnProperty(quality) && linksObject[quality]) {
+                        const linkA = document.createElement('a');
+                        linkA.href = linksObject[quality];
+                        linkA.className = 'download-option';
+                        linkA.target = '_blank'; // Open in new tab
+                        
+                        const icon = document.createElement('i');
+                        icon.className = 'fas fa-download';
+                        linkA.appendChild(icon);
+                        
+                        linkA.appendChild(document.createTextNode(` ${quality.replace('_download', '')}`));
+                        optionsDiv.appendChild(linkA);
+                    }
+                }
+                sectionDiv.appendChild(optionsDiv);
+                return sectionDiv;
+            }
+            
+            function createNoLinksMessage(message) {
+                const p = document.createElement('p');
+                p.className = 'no-links';
+                p.textContent = message;
+                return p;
+            }
+
+
+            function showError(message) {
+                errorTextP.textContent = message;
+                errorMessageDiv.classList.add('active');
+                resultsDiv.classList.remove('active');
+                loadingState.classList.remove('active');
+                 if (mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
+                 mediaCard.innerHTML = ''; // Clear any partial results
+                 mediaCard.appendChild(mediaCardPlaceholder); // Re-add placeholder
+            }
 
             const faqQuestions = document.querySelectorAll('.faq-question');
             faqQuestions.forEach(question => {
@@ -693,188 +1278,7 @@
                 });
             });
 
-            searchForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const query = animenameInput.value.trim();
-
-                if (!query) {
-                    displayError("Search field cannot be empty.");
-                    return;
-                }
-
-                // Regex to capture anime name and episode number
-                // Allows for "Anime Name Season X epi Y" or "Anime Name Y"
-                const match = query.match(/^(.*?)(?:\s+s\d+)?(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
-                
-                let animeName, episodeNumber;
-
-                if (match && match[1] && match[2]) {
-                    animeName = match[1].trim(); // Everything before the last number (and optional "epi" part)
-                    episodeNumber = match[2];    // The last number
-                } else {
-                    // Fallback or stricter parsing if needed, for now simple split for "Name Number"
-                    const parts = query.split(/\s+/);
-                    if (parts.length < 2 || isNaN(parseInt(parts[parts.length - 1]))) {
-                        displayError("Invalid format. Please use 'Anime Name EpisodeNumber' (e.g., Solo Leveling 3) or 'Anime Name S_ epi _' (e.g., Naruto S2 epi 10).");
-                        return;
-                    }
-                    episodeNumber = parts.pop();
-                    animeName = parts.join(" ");
-                }
-                
-                if (!animeName) {
-                    displayError("Anime name cannot be empty after parsing.");
-                    return;
-                }
-                if (parseInt(episodeNumber) <= 0 || isNaN(parseInt(episodeNumber))) {
-                    displayError("Episode number must be a positive integer.");
-                    return;
-                }
-
-
-                loadingState.classList.add('active');
-                errorMsgDiv.classList.remove('active');
-                resultsSection.classList.remove('active');
-                mediaCard.innerHTML = ''; // Clear previous results
-                if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'none';
-
-
-                try {
-                    const response = await fetch(`/api/search-anime?animename=${encodeURIComponent(animeName)}&episode=${encodeURIComponent(episodeNumber)}`);
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ message: `Error: ${response.status} ${response.statusText}` }));
-                        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    displayResults(data);
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                    displayError(error.message || 'Failed to fetch anime details. Please try again.');
-                } finally {
-                    loadingState.classList.remove('active');
-                }
-            });
-
-            function displayResults(data) {
-                resultsSection.classList.add('active');
-                mediaCard.innerHTML = ''; // Clear previous content or placeholder
-
-                console.log("Snapshot URL from API:", data.snapshot);
-                const snapshotImg = document.createElement('img');
-                snapshotImg.className = 'media-snapshot';
-                snapshotImg.alt = data.title || 'Anime Snapshot';
-                snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
-                snapshotImg.setAttribute('data-ai-hint', 'anime art'); // Added data-ai-hint
-
-                if (data.snapshot) {
-                    snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}`;
-                    snapshotImg.onerror = () => {
-                        console.error("Failed to load snapshot via proxy or direct:", data.snapshot);
-                        snapshotImg.src = 'https://placehold.co/150x225.png'; // Fallback placeholder
-                    };
-                } else {
-                    console.log("No snapshot URL provided, using placeholder.");
-                    snapshotImg.src = 'https://placehold.co/150x225.png'; // Fallback placeholder
-                }
-                mediaCard.appendChild(snapshotImg);
-
-                const mediaInfoDiv = document.createElement('div');
-                mediaInfoDiv.className = 'media-info';
-
-                const titleElement = document.createElement('h3');
-                titleElement.className = 'media-title';
-                titleElement.textContent = data.title || 'Title Not Available';
-                mediaInfoDiv.appendChild(titleElement);
-
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'media-meta';
-                const episodeMeta = document.createElement('span');
-                episodeMeta.className = 'meta-item';
-                episodeMeta.innerHTML = `<i class="fas fa-film"></i> Episode ${data.episode || 'N/A'}`;
-                metaDiv.appendChild(episodeMeta);
-                mediaInfoDiv.appendChild(metaDiv);
-
-                const downloadOptionsContainer = document.createElement('div');
-                downloadOptionsContainer.className = 'download-options-container';
-
-                if (data.links) {
-                    if (data.links.sub && Object.keys(data.links.sub).length > 0) {
-                        const subSection = createLinksSection('Subtitled Downloads <i class="fas fa-closed-captioning"></i>', data.links.sub);
-                        downloadOptionsContainer.appendChild(subSection);
-                    }
-                    if (data.links.dub && Object.keys(data.links.dub).length > 0) {
-                        const dubSection = createLinksSection('Dubbed Downloads <i class="fas fa-microphone-alt"></i>', data.links.dub);
-                        downloadOptionsContainer.appendChild(dubSection);
-                    }
-                     if (!downloadOptionsContainer.hasChildNodes()) {
-                        const noLinksMsg = document.createElement('p');
-                        noLinksMsg.className = 'no-links';
-                        noLinksMsg.textContent = 'No download links available for this episode.';
-                        downloadOptionsContainer.appendChild(noLinksMsg);
-                    }
-                } else {
-                    const noLinksMsg = document.createElement('p');
-                    noLinksMsg.className = 'no-links';
-                    noLinksMsg.textContent = 'Download links information is missing.';
-                    downloadOptionsContainer.appendChild(noLinksMsg);
-                }
-                mediaInfoDiv.appendChild(downloadOptionsContainer);
-                mediaCard.appendChild(mediaInfoDiv);
-            }
-            
-            function createLinksSection(headerText, linksObject) {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'download-links-section';
-
-                const header = document.createElement('h4');
-                header.className = 'links-header';
-                header.innerHTML = headerText;
-                sectionDiv.appendChild(header);
-
-                const optionsDiv = document.createElement('div');
-                optionsDiv.className = 'download-options';
-
-                let hasLinks = false;
-                for (const quality in linksObject) {
-                    if (linksObject[quality] && quality.includes('_download')) { // Only process download links
-                        hasLinks = true;
-                        const link = document.createElement('a');
-                        link.href = linksObject[quality];
-                        link.className = 'download-option';
-                        link.target = '_blank'; // Open in new tab
-                        link.innerHTML = `<i class="fas fa-download"></i> ${quality.replace('_download', '')}`;
-                        
-                        const tooltip = document.createElement('span');
-                        tooltip.className = 'tooltip-text';
-                        tooltip.textContent = `Download ${quality.replace('_download', '')}`;
-                        
-                        const tooltipContainer = document.createElement('div');
-                        tooltipContainer.className = 'tooltip';
-                        tooltipContainer.appendChild(link);
-                        tooltipContainer.appendChild(tooltip);
-                        
-                        optionsDiv.appendChild(tooltipContainer);
-                    }
-                }
-                if (!hasLinks) {
-                    const noLinksMsg = document.createElement('p');
-                    noLinksMsg.className = 'no-links';
-                    noLinksMsg.textContent = 'No download links available for this type.';
-                    optionsDiv.appendChild(noLinksMsg);
-                }
-
-                sectionDiv.appendChild(optionsDiv);
-                return sectionDiv;
-            }
-
-            function displayError(message) {
-                errorTextSpan.textContent = message;
-                errorMsgDiv.classList.add('active');
-                resultsSection.classList.remove('active');
-                if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
-                mediaCard.innerHTML = ''; // Clear any previous results from card
-                mediaCard.appendChild(mediaCardPlaceholder); // Re-add placeholder
-            }
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
         });
     </script>
 </body>
