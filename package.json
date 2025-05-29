@@ -1,0 +1,16 @@
+{
+ "name": "ANIPLIX",
+ "version": "1.0.5",
+ "description": "Simple anime downloader website.",
+ "main": "server.js",
+ "type": "commonjs",
+ "scripts": {
+  "start": "node server.js"
+ },
+ "author": "BLUE",
+ "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "express": "^5.1.0"
+  }
+}
