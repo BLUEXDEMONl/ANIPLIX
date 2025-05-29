@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniplix - Anime Downloader</title>
+    <title>Aniplix - Random Anime</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -198,7 +198,7 @@
 
         .url-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
 
-        .download-btn {
+        .download-btn { /* Used for the 'Get Another Random Anime' button on this page */
             background: var(--gradient);
             border: none;
             color: white;
@@ -217,6 +217,7 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
+            margin-top: 20px; /* Added margin for spacing */
         }
 
         .download-btn::before {
@@ -237,7 +238,7 @@
         .download-btn:hover::before { left: 100%; }
         .download-btn:active { transform: translateY(0); }
 
-        .results { margin-top: 40px; display: none; }
+        .results { margin-top: 40px; display: none; } /* This class is used for the random anime card */
         .results.active { display: block; animation: fadeIn 0.5s ease; }
 
         @keyframes fadeIn {
@@ -300,14 +301,24 @@
         }
 
         .meta-item { display: flex; align-items: center; gap: 5px; }
+        .media-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-top: 10px;
+            max-height: 100px; /* Limit summary height */
+            overflow-y: auto; /* Add scroll for long summaries */
+            text-align: left;
+            padding-right: 10px; /* For scrollbar */
+        }
 
-        .download-options-container {
+        .download-options-container { /* Used for tags here */
             margin-top: 20px;
             width: 100%;
         }
 
-        .download-links-section { margin-bottom: 15px; }
-        .links-header {
+        .download-links-section { margin-bottom: 15px; } /* Re-used for tags section header */
+        .links-header { /* Re-used for tags header */
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--accent-color);
@@ -316,37 +327,35 @@
             border-bottom: 1px solid var(--glass-border);
         }
 
-        .download-options {
+        .download-options { /* Re-used for tags display */
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px; /* Slightly smaller gap for tags */
             justify-content: center;
         }
 
-        .download-option {
-            background: rgba(255, 255, 255, 0.1);
+        .download-option { /* Re-used for individual tags */
+            background: rgba(255, 255, 255, 0.08); /* Slightly different bg for tags */
             border: 1px solid var(--glass-border);
             color: var(--text-primary);
-            padding: 10px 18px; 
-            border-radius: 8px; 
-            font-size: 0.9rem; 
-            cursor: pointer;
+            padding: 6px 12px; 
+            border-radius: 20px; /* Pill shape for tags */
+            font-size: 0.85rem; 
+            cursor: default; /* Tags are not clickable */
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             text-decoration: none;
         }
-
-        .download-option:hover {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(225, 48, 108, 0.2);
+        .download-option:hover { /* Less pronounced hover for tags */
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(0); /* No lift on hover for tags */
+            box-shadow: none;
         }
+        .download-option i { font-size: 0.9rem; }
+        .no-links { color: var(--text-secondary); font-style: italic; } /* Can be reused if tags are empty */
 
-        .download-option i { font-size: 1rem; }
-        .no-links { color: var(--text-secondary); font-style: italic; }
 
         .loading {
             display: none;
@@ -419,41 +428,16 @@
             40%, 80% { transform: translateX(5px); }
         }
         .error-icon { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
-
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
-        .feature-card {
-            background: var(--light-bg); border-radius: 15px; padding: 25px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            gap: 18px; transition: var(--transition); border: 1px solid transparent;
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .feature-card:hover {
-            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: var(--glass-border);
-        }
-        .feature-icon {
-            font-size: 2.5rem; color: var(--primary-color); background: rgba(225, 48, 108, 0.1);
-            width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-        }
-        .feature-title { font-size: 1.2rem; font-weight: 600; }
-        .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
-
-        .faq { margin-top: 60px; }
-        .faq-item { margin-bottom: 15px; border-radius: 12px; overflow: hidden; background: var(--light-bg); }
-        .faq-question {
-            padding: 18px 25px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary);
-            font-weight: 500; cursor: pointer; display: flex; justify-content: space-between;
-            align-items: center; transition: var(--transition);
-        }
-        .faq-question:hover { background: rgba(255, 255, 255, 0.08); }
-        .faq-question::after { content: '+'; font-size: 1.3rem; transition: var(--transition); }
-        .faq-question.active::after { content: '-'; }
-        .faq-answer {
-            padding: 0 25px; max-height: 0; overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease; color: var(--text-secondary);
-            font-size: 0.95rem; line-height: 1.6;
-        }
-        .faq-question.active + .faq-answer { padding: 18px 25px; max-height: 500px; }
 
         .footer {
             margin-top: 80px; text-align: center; color: var(--text-secondary); font-size: 0.95rem;
@@ -501,7 +485,6 @@
             .main-container { padding: 20px; }
             .logo-text { font-size: 1.5rem; }
             .download-btn { padding: 16px 25px; font-size: 1rem;}
-            .url-input { padding: 16px 20px; font-size: 1rem; }
             
             .media-card {
                 flex-direction: column; 
@@ -519,14 +502,9 @@
                 text-align: center; 
             }
             .media-title { font-size: 1.2rem; }
-            .links-header { font-size: 1rem; }
-            .download-option { font-size: 0.85rem; padding: 8px 15px; }
-
-            .feature-card { padding: 20px; }
-            .feature-title { font-size: 1.1rem; }
-            .faq-question { padding: 15px 20px; }
-            .faq-answer { padding: 0 20px; }
-            .faq-question.active + .faq-answer { padding: 15px 20px; }
+            .links-header { font-size: 1rem; } /* For tags header */
+            .download-option { font-size: 0.8rem; padding: 5px 10px; } /* For tags */
+            .page-title { font-size: 1.5rem; }
         }
 
         @media (min-width: 769px) { 
@@ -549,10 +527,10 @@
             .media-meta {
                 justify-content: flex-start; 
             }
-            .download-options {
+            .download-options { /* For tags */
                 justify-content: flex-start; 
             }
-            .links-header {
+            .links-header { /* For tags header */
                 text-align: left;
             }
         }
@@ -571,26 +549,19 @@
             <span class="logo-text">Aniplix</span>
         </a>
         <div class="header-actions">
-            <span class="tagline">Your Gateway to Anime</span>
-            <a href="/random" class="random-anime-btn-header tooltip">
-                <i class="fas fa-random"></i> Random Anime
-                <span class="tooltip-text">Discover a random anime!</span>
+            <span class="tagline">Discover Your Next Favorite!</span>
+            <a href="/anime.html" class="back-to-search-btn tooltip">
+                <i class="fas fa-arrow-left"></i> Back to Search
+                <span class="tooltip-text">Return to anime search</span>
             </a>
         </div>
     </header>
 
     <main class="main-container">
-        <form id="searchForm" class="download-form">
-            <div class="input-group">
-                <input type="text" id="animename" class="url-input" placeholder="e.g., Solo Leveling 3 or Naruto S2 epi 10" required>
-            </div>
-            <button type="submit" class="download-btn">
-                <i class="fas fa-search"></i> Search Anime
-            </button>
-        </form>
-
+        <h1 class="page-title">Random Anime Suggestion</h1>
+        
         <div class="loading" id="loadingState">
-            <div class="loader">
+             <div class="loader">
                 <div>
                     <ul>
                         <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
@@ -602,66 +573,21 @@
                     </ul>
                 </div>
             </div>
-            <p class="loading-text-custom">Loading Anime...</p>
+            <p class="loading-text-custom" id="randomLoadingText">Fetching a random anime...</p>
         </div>
 
         <div id="errorMsg" class="error-message">
             <i class="fas fa-exclamation-triangle error-icon"></i>
             <span id="errorText"></span>
         </div>
-
-        <div class="results" id="resultsSection">
-            <div class="media-card" id="mediaCard">
-                <p class="media-card-placeholder" id="mediaCardPlaceholder">Enter an anime name and episode to search.</p>
-                <!-- Content will be injected here by JavaScript -->
-            </div>
+        
+        <div class="results" id="randomAnimeResultCard">
+             <!-- Random anime details will be injected here -->
         </div>
 
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                <h3 class="feature-title">Lightning Fast</h3>
-                <p class="feature-desc">Get your anime download links in seconds. Our optimized system ensures quick results.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-link"></i></div>
-                <h3 class="feature-title">Multiple Qualities</h3>
-                <p class="feature-desc">Choose from various download qualities (360p, 720p, 1080p) for both sub and dub.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3 class="feature-title">Reliable & Secure</h3>
-                <p class="feature-desc">We strive to provide working links. Your searches are private and secure.</p>
-            </div>
-        </section>
-
-        <section class="faq">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">Is Aniplix free to use?</div>
-                <div class="faq-answer">
-                    <p>Yes, Aniplix is completely free to use for searching anime download links.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Where do the download links come from?</div>
-                <div class="faq-answer">
-                    <p>Aniplix fetches data from publicly available APIs. We do not host any content ourselves.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">What if a link is broken?</div>
-                <div class="faq-answer">
-                    <p>We try our best to fetch working links. However, link availability can change. If you find a broken link, try a different quality or source if available.</p>
-                </div>
-            </div>
-             <div class="faq-item">
-                <div class="faq-question">How does the 'Random Anime' feature work?</div>
-                <div class="faq-answer">
-                    <p>The 'Random Anime' feature scrapes information from AnimeHeaven to suggest a random anime for you to discover.</p>
-                </div>
-            </div>
-        </section>
+        <button id="fetchAnotherRandomBtn" class="download-btn" style="display: none;">
+            <i class="fas fa-dice"></i> Get Another Random Anime
+        </button>
     </main>
 
     <footer class="footer">
@@ -675,206 +601,155 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const searchForm = document.getElementById('searchForm');
-            const animenameInput = document.getElementById('animename');
             const loadingState = document.getElementById('loadingState');
             const errorMsgDiv = document.getElementById('errorMsg');
             const errorTextSpan = document.getElementById('errorText');
-            const resultsSection = document.getElementById('resultsSection');
-            const mediaCard = document.getElementById('mediaCard');
-            const mediaCardPlaceholder = document.getElementById('mediaCardPlaceholder');
+            const randomAnimeResultCard = document.getElementById('randomAnimeResultCard');
+            const fetchAnotherRandomBtn = document.getElementById('fetchAnotherRandomBtn');
+            const randomLoadingText = document.getElementById('randomLoadingText');
 
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            const faqQuestions = document.querySelectorAll('.faq-question');
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', () => {
-                    question.classList.toggle('active');
-                });
-            });
-
-            searchForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const query = animenameInput.value.trim();
-
-                if (!query) {
-                    displayError("Search field cannot be empty.");
-                    return;
-                }
-
-                // Regex to capture anime name and episode number
-                // Allows for "Anime Name Season X epi Y" or "Anime Name Y"
-                const match = query.match(/^(.*?)(?:\s+s\d+)?(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
-                
-                let animeName, episodeNumber;
-
-                if (match && match[1] && match[2]) {
-                    animeName = match[1].trim(); // Everything before the last number (and optional "epi" part)
-                    episodeNumber = match[2];    // The last number
-                } else {
-                    // Fallback or stricter parsing if needed, for now simple split for "Name Number"
-                    const parts = query.split(/\s+/);
-                    if (parts.length < 2 || isNaN(parseInt(parts[parts.length - 1]))) {
-                        displayError("Invalid format. Please use 'Anime Name EpisodeNumber' (e.g., Solo Leveling 3) or 'Anime Name S_ epi _' (e.g., Naruto S2 epi 10).");
-                        return;
-                    }
-                    episodeNumber = parts.pop();
-                    animeName = parts.join(" ");
-                }
-                
-                if (!animeName) {
-                    displayError("Anime name cannot be empty after parsing.");
-                    return;
-                }
-                if (parseInt(episodeNumber) <= 0 || isNaN(parseInt(episodeNumber))) {
-                    displayError("Episode number must be a positive integer.");
-                    return;
-                }
-
-
+            
+            async function fetchAndDisplayRandomAnime() {
                 loadingState.classList.add('active');
+                if(randomLoadingText) randomLoadingText.textContent = "Fetching a random anime...";
                 errorMsgDiv.classList.remove('active');
-                resultsSection.classList.remove('active');
-                mediaCard.innerHTML = ''; // Clear previous results
-                if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'none';
-
+                randomAnimeResultCard.classList.remove('active');
+                randomAnimeResultCard.innerHTML = '<p class="media-card-placeholder" id="randomPlaceholder">Finding a suggestion for you...</p>';
+                fetchAnotherRandomBtn.style.display = 'none';
 
                 try {
-                    const response = await fetch(`/api/search-anime?animename=${encodeURIComponent(animeName)}&episode=${encodeURIComponent(episodeNumber)}`);
+                    const response = await fetch('/api/random-anime');
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: `Error: ${response.status} ${response.statusText}` }));
                         throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
                     }
                     const data = await response.json();
-                    displayResults(data);
+                    displayRandomAnime(data);
+                    fetchAnotherRandomBtn.style.display = 'flex'; // Show button after successful fetch
                 } catch (error) {
-                    console.error('Fetch error:', error);
-                    displayError(error.message || 'Failed to fetch anime details. Please try again.');
+                    console.error('Fetch error (random anime):', error);
+                    displayError(error.message || 'Failed to fetch random anime. Please try again.');
+                    fetchAnotherRandomBtn.style.display = 'flex'; // Also show button on error to allow retry
                 } finally {
                     loadingState.classList.remove('active');
                 }
-            });
+            }
 
-            function displayResults(data) {
-                resultsSection.classList.add('active');
-                mediaCard.innerHTML = ''; // Clear previous content or placeholder
+            function displayRandomAnime(data) {
+                randomAnimeResultCard.classList.add('active');
+                randomAnimeResultCard.innerHTML = ''; // Clear placeholder or previous content
 
-                console.log("Snapshot URL from API:", data.snapshot);
-                const snapshotImg = document.createElement('img');
-                snapshotImg.className = 'media-snapshot';
-                snapshotImg.alt = data.title || 'Anime Snapshot';
-                snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
-                snapshotImg.setAttribute('data-ai-hint', 'anime art'); // Added data-ai-hint
+                const mediaCard = document.createElement('div');
+                mediaCard.className = 'media-card';
 
-                if (data.snapshot) {
-                    snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}`;
+                if (data.poster) {
+                    const snapshotImg = document.createElement('img');
+                    snapshotImg.className = 'media-snapshot';
+                    snapshotImg.alt = data.englishName || 'Anime Poster';
+                    snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
+                    snapshotImg.setAttribute('data-ai-hint', 'anime art');
+                    snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.poster)}`;
                     snapshotImg.onerror = () => {
-                        console.error("Failed to load snapshot via proxy or direct:", data.snapshot);
-                        snapshotImg.src = 'https://placehold.co/150x225.png'; // Fallback placeholder
+                        snapshotImg.src = 'https://placehold.co/150x225.png'; 
                     };
+                    mediaCard.appendChild(snapshotImg);
                 } else {
-                    console.log("No snapshot URL provided, using placeholder.");
-                    snapshotImg.src = 'https://placehold.co/150x225.png'; // Fallback placeholder
+                     const placeholderImg = document.createElement('img');
+                     placeholderImg.className = 'media-snapshot';
+                     placeholderImg.alt = 'Poster Not Available';
+                     placeholderImg.src = 'https://placehold.co/150x225.png';
+                     placeholderImg.setAttribute('data-ai-hint', 'anime art');
+                     mediaCard.appendChild(placeholderImg);
                 }
-                mediaCard.appendChild(snapshotImg);
 
                 const mediaInfoDiv = document.createElement('div');
                 mediaInfoDiv.className = 'media-info';
 
                 const titleElement = document.createElement('h3');
                 titleElement.className = 'media-title';
-                titleElement.textContent = data.title || 'Title Not Available';
+                titleElement.textContent = data.englishName || 'Title Not Available';
                 mediaInfoDiv.appendChild(titleElement);
 
+                if (data.japaneseName && data.japaneseName !== 'Not available') {
+                    const japaneseTitleElement = document.createElement('p');
+                    japaneseTitleElement.style.color = 'var(--text-secondary)';
+                    japaneseTitleElement.style.fontSize = '0.9em';
+                    japaneseTitleElement.textContent = `(${data.japaneseName})`;
+                    mediaInfoDiv.appendChild(japaneseTitleElement);
+                }
+                
                 const metaDiv = document.createElement('div');
                 metaDiv.className = 'media-meta';
-                const episodeMeta = document.createElement('span');
-                episodeMeta.className = 'meta-item';
-                episodeMeta.innerHTML = `<i class="fas fa-film"></i> Episode ${data.episode || 'N/A'}`;
-                metaDiv.appendChild(episodeMeta);
-                mediaInfoDiv.appendChild(metaDiv);
-
-                const downloadOptionsContainer = document.createElement('div');
-                downloadOptionsContainer.className = 'download-options-container';
-
-                if (data.links) {
-                    if (data.links.sub && Object.keys(data.links.sub).length > 0) {
-                        const subSection = createLinksSection('Subtitled Downloads <i class="fas fa-closed-captioning"></i>', data.links.sub);
-                        downloadOptionsContainer.appendChild(subSection);
-                    }
-                    if (data.links.dub && Object.keys(data.links.dub).length > 0) {
-                        const dubSection = createLinksSection('Dubbed Downloads <i class="fas fa-microphone-alt"></i>', data.links.dub);
-                        downloadOptionsContainer.appendChild(dubSection);
-                    }
-                     if (!downloadOptionsContainer.hasChildNodes()) {
-                        const noLinksMsg = document.createElement('p');
-                        noLinksMsg.className = 'no-links';
-                        noLinksMsg.textContent = 'No download links available for this episode.';
-                        downloadOptionsContainer.appendChild(noLinksMsg);
-                    }
-                } else {
-                    const noLinksMsg = document.createElement('p');
-                    noLinksMsg.className = 'no-links';
-                    noLinksMsg.textContent = 'Download links information is missing.';
-                    downloadOptionsContainer.appendChild(noLinksMsg);
+                if(data.episodes && data.episodes !== 'N/A') {
+                    const episodeMeta = document.createElement('span');
+                    episodeMeta.className = 'meta-item';
+                    episodeMeta.innerHTML = `<i class="fas fa-tv"></i> Episodes: ${data.episodes}`;
+                    metaDiv.appendChild(episodeMeta);
                 }
-                mediaInfoDiv.appendChild(downloadOptionsContainer);
+                if(data.year && data.year !== 'N/A') {
+                    const yearMeta = document.createElement('span');
+                    yearMeta.className = 'meta-item';
+                    yearMeta.innerHTML = `<i class="fas fa-calendar-alt"></i> Year: ${data.year}`;
+                    metaDiv.appendChild(yearMeta);
+                }
+                if(data.rating && data.rating !== 'N/A') {
+                    const ratingMeta = document.createElement('span');
+                    ratingMeta.className = 'meta-item';
+                    ratingMeta.innerHTML = `<i class="fas fa-star"></i> Rating: ${data.rating}`;
+                    metaDiv.appendChild(ratingMeta);
+                }
+                if (metaDiv.hasChildNodes()) {
+                    mediaInfoDiv.appendChild(metaDiv);
+                }
+
+
+                if (data.summary) {
+                    const summaryElement = document.createElement('p');
+                    summaryElement.className = 'media-summary';
+                    summaryElement.textContent = data.summary;
+                    mediaInfoDiv.appendChild(summaryElement);
+                }
+
+                if (data.tags && data.tags.length > 0) {
+                    const tagsContainer = document.createElement('div');
+                    tagsContainer.className = 'download-options-container'; // Reusing class for structure
+                    
+                    const tagsHeader = document.createElement('h4');
+                    tagsHeader.className = 'links-header'; // Reusing class for structure
+                    tagsHeader.innerHTML = '<i class="fas fa-tags"></i> Genres/Tags';
+                    tagsContainer.appendChild(tagsHeader);
+
+                    const tagsOptionsDiv = document.createElement('div');
+                    tagsOptionsDiv.className = 'download-options'; // Reusing class for structure
+
+                    data.tags.forEach(tagText => {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'download-option'; // Reusing class for styling individual tags
+                        tagElement.textContent = tagText;
+                        tagsOptionsDiv.appendChild(tagElement);
+                    });
+                    tagsContainer.appendChild(tagsOptionsDiv);
+                    mediaInfoDiv.appendChild(tagsContainer);
+                }
+                
                 mediaCard.appendChild(mediaInfoDiv);
-            }
-            
-            function createLinksSection(headerText, linksObject) {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'download-links-section';
-
-                const header = document.createElement('h4');
-                header.className = 'links-header';
-                header.innerHTML = headerText;
-                sectionDiv.appendChild(header);
-
-                const optionsDiv = document.createElement('div');
-                optionsDiv.className = 'download-options';
-
-                let hasLinks = false;
-                for (const quality in linksObject) {
-                    if (linksObject[quality] && quality.includes('_download')) { // Only process download links
-                        hasLinks = true;
-                        const link = document.createElement('a');
-                        link.href = linksObject[quality];
-                        link.className = 'download-option';
-                        link.target = '_blank'; // Open in new tab
-                        link.innerHTML = `<i class="fas fa-download"></i> ${quality.replace('_download', '')}`;
-                        
-                        const tooltip = document.createElement('span');
-                        tooltip.className = 'tooltip-text';
-                        tooltip.textContent = `Download ${quality.replace('_download', '')}`;
-                        
-                        const tooltipContainer = document.createElement('div');
-                        tooltipContainer.className = 'tooltip';
-                        tooltipContainer.appendChild(link);
-                        tooltipContainer.appendChild(tooltip);
-                        
-                        optionsDiv.appendChild(tooltipContainer);
-                    }
-                }
-                if (!hasLinks) {
-                    const noLinksMsg = document.createElement('p');
-                    noLinksMsg.className = 'no-links';
-                    noLinksMsg.textContent = 'No download links available for this type.';
-                    optionsDiv.appendChild(noLinksMsg);
-                }
-
-                sectionDiv.appendChild(optionsDiv);
-                return sectionDiv;
+                randomAnimeResultCard.appendChild(mediaCard);
             }
 
             function displayError(message) {
                 errorTextSpan.textContent = message;
                 errorMsgDiv.classList.add('active');
-                resultsSection.classList.remove('active');
-                if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
-                mediaCard.innerHTML = ''; // Clear any previous results from card
-                mediaCard.appendChild(mediaCardPlaceholder); // Re-add placeholder
+                randomAnimeResultCard.classList.remove('active');
+                if(document.getElementById('randomPlaceholder')) {
+                    document.getElementById('randomPlaceholder').textContent = "Could not load suggestion.";
+                }
             }
+
+            fetchAnotherRandomBtn.addEventListener('click', fetchAndDisplayRandomAnime);
+
+            // Initial fetch when page loads
+            fetchAndDisplayRandomAnime();
         });
     </script>
 </body>
