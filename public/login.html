@@ -157,7 +157,7 @@
                         localStorage.setItem('isLoggedInAniplix', 'true');
                         // Wait a bit before redirecting to show success message
                         setTimeout(() => {
-                            window.location.href = data.redirectTo || '/anime.html';
+                            window.location.href = data.redirectTo || '/anime';
                         }, 1000);
                     } else {
                         showMessage(data.message || 'Login failed. Please try again.', 'error');
