@@ -1,4 +1,3 @@
-
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
@@ -25,7 +24,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime.html', (req, res) => {
+app.get('/anime', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
@@ -354,16 +353,4 @@ app.use((req, res, next) => {
 
 app.listen(PORT, () => {
     console.log(`Express server is listening on http://localhost:${PORT}`);
-    console.log(`Access the login page at: http://localhost:${PORT}/`);
-    console.log(`Access the signup page at: http://localhost:${PORT}/signup`);
-    console.log(`Access the anime search page at: http://localhost:${PORT}/anime.html`);
-    console.log(`Access the random anime page at: http://localhost:${PORT}/random`);
-    console.log(`Access the new anime page at: http://localhost:${PORT}/new`);
-    console.log(`API for user signup: POST http://localhost:${PORT}/api/signup`);
-    console.log(`API for user login: POST http://localhost:${PORT}/api/login`);
-    console.log(`API for anime search: GET http://localhost:${PORT}/api/search-anime?animename=youranimename&episode=yourepisode`);
-    console.log(`Image proxy endpoint: GET http://localhost:${PORT}/api/image-proxy?url=imageurl`);
-    console.log(`Random anime API: GET http://localhost:${PORT}/api/random-anime`);
-    console.log(`New anime API: GET http://localhost:${PORT}/api/new-anime`);
 });
-
