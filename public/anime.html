@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniplix - Anime Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="anime.css">
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+    </div>
+
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-play-circle logo-icon"></i>
+            <span class="logo-text">Aniplix</span>
+        </div>
+        <p class="tagline">Your Gateway to Anime Episodes</p>
+    </header>
+
+    <main class="main-container">
+        <form id="searchForm" class="download-form">
+            <div class="input-group">
+                <input type="text" id="animeQuery" class="url-input" placeholder="e.g., Solo Leveling 3 or Naruto Shippuden epi 10" required>
+                 <label for="animeQuery" class="sr-only">Anime Name and Episode</label>
+            </div>
+            <button type="submit" class="download-btn">
+                <i class="fas fa-search"></i> Search Anime
+            </button>
+        </form>
+
+        <div class="loading" id="loadingState">
+            <div class="loader">
+              <div>
+                <ul>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                  <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                </ul>
+              </div>
+              <span>Loading Anime...</span>
+            </div>
+        </div>
+
+        <div class="results" id="resultsContainer">
+            <div class="media-card" id="mediaCard">
+                 <p id="mediaCardPlaceholder" class="media-text">Enter an anime name and episode above to search!</p>
+                
+            </div>
+        </div>
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle error-icon"></i>
+            <span id="errorText"></span>
+        </div>
+    </main>
+
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-bolt feature-icon"></i>
+            <h3 class="feature-title">Lightning Fast</h3>
+            <p class="feature-desc">Get your anime download links in seconds. No more waiting around!</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-film feature-icon"></i>
+            <h3 class="feature-title">Wide Selection</h3>
+            <p class="feature-desc">Access a vast library of anime series and episodes, both subbed and dubbed.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-cogs feature-icon"></i>
+            <h3 class="feature-title">Multiple Qualities</h3>
+            <p class="feature-desc">Choose from various video qualities (360p, 720p, 1080p) to suit your needs.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shield-alt feature-icon"></i>
+            <h3 class="feature-title">User Friendly</h3>
+            <p class="feature-desc">Simple and intuitive interface for a seamless anime searching experience.</p>
+        </div>
+    </section>
+
+    <section class="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <div class="faq-question">How do I use Aniplix?</div>
+            <div class="faq-answer">
+                <p>Simply type the anime name and episode number (e.g., "Naruto 1" or "One Piece epi 500") into the search bar and click "Search Anime". Aniplix will fetch the available download links for you.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Are the downloads direct?</div>
+            <div class="faq-answer">
+                <p>Aniplix provides links to external download sources. We do not host any files on our servers. The availability and speed of downloads depend on these external sources.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Is Aniplix free to use?</div>
+            <div class="faq-answer">
+                <p>Yes, Aniplix is completely free to use for finding anime download links.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">What if I can't find an anime?</div>
+            <div class="faq-answer">
+                <p>Our database is extensive, but if you can't find a specific anime or episode, it might not be available through our current API provider, or there might be a typo in your search. Double-check the spelling and try again!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; <span id="currentYear"></span> Aniplix. All rights reserved. Created with <i class="fas fa-heart" style="color: var(--primary-color);"></i> by <a href="https://github.com/yourgithub" target="_blank" class="creator">Your Name/Brand</a>.</p>
+        <p>Disclaimer: Aniplix is a search engine and does not host any files. All links are provided by third-party services.</p>
+        <div class="social-links">
+            <a href="#" class="social-link" aria-label="Twitter" title="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Discord" title="Join our Discord"><i class="fab fa-discord"></i></a>
+            <a href="#" class="social-link" aria-label="GitHub" title="View source on GitHub"><i class="fab fa-github"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const animeQueryInput = document.getElementById('animeQuery');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const mediaCard = document.getElementById('mediaCard');
+        const mediaCardPlaceholder = document.getElementById('mediaCardPlaceholder');
+        const loadingState = document.getElementById('loadingState');
+        const errorMessageDiv = document.getElementById('errorMessage');
+        const errorTextSpan = document.getElementById('errorText');
+
+        searchForm.addEventListener('submit', searchAnime);
+
+        async function searchAnime(event) {
+            event.preventDefault();
+            const query = animeQueryInput.value.trim();
+
+            if (!query) {
+                displayError("Please enter an anime name and episode.");
+                return;
+            }
+
+            // Regex to capture anime name (group 1) and episode number (group 3)
+            // It handles optional "ep", "epi", "episode" keywords.
+            // Example: "Solo Leveling 2 epi 3" -> name: "Solo Leveling 2", episode: "3"
+            // Example: "Solo Leveling 3" -> name: "Solo Leveling", episode: "3"
+            const match = query.match(/^(.*?)(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
+
+            let animename, episode;
+
+            if (match && match[1] && match[2]) {
+                animename = match[1].trim();
+                episode = match[2];
+            } else {
+                // Fallback for simple "Name Number" if the above regex fails
+                const parts = query.split(/\s+/);
+                if (parts.length >= 2 && !isNaN(parseInt(parts[parts.length - 1]))) {
+                    episode = parts.pop();
+                    animename = parts.join(" ");
+                } else {
+                     displayError("Invalid format. Please use 'Anime Name EpisodeNumber' or 'Anime Name Season X epi Y'. e.g., Solo Leveling 3");
+                     return;
+                }
+            }
+            
+            if (!animename || !episode) {
+                displayError("Could not parse anime name or episode. Use format: Name Episode (e.g. Naruto 1)");
+                return;
+            }
+
+
+            resultsContainer.classList.remove('active');
+            mediaCard.innerHTML = ''; // Clear previous results
+            mediaCard.appendChild(mediaCardPlaceholder); // Re-add placeholder for next search
+            mediaCardPlaceholder.style.display = 'none'; // Hide placeholder during loading/results
+            errorMessageDiv.classList.remove('active');
+            loadingState.classList.add('active');
+
+            try {
+                const response = await fetch(`/api/search-anime?animename=${encodeURIComponent(animename)}&episode=${encodeURIComponent(episode)}`);
+                const data = await response.json();
+
+                loadingState.classList.remove('active');
+
+                if (!response.ok || data.message) {
+                    throw new Error(data.message || `Error: ${response.status}`);
+                }
+                displayResults(data);
+            } catch (error) {
+                loadingState.classList.remove('active');
+                displayError(error.message || "Failed to fetch anime data. The API might be down or the anime/episode not found.");
+            }
+        }
+
+        function displayResults(data) {
+            resultsContainer.classList.add('active');
+            mediaCardPlaceholder.style.display = 'none';
+            mediaCard.innerHTML = ''; // Clear placeholder or previous results
+
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'media-content-wrapper';
+
+            const snapshotImg = document.createElement('img');
+            snapshotImg.className = 'media-snapshot';
+            snapshotImg.alt = data.title ? `Snapshot of ${data.title}` : 'Anime Snapshot';
+            snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
+            
+            if (data.snapshot) {
+                console.log("Attempting to load snapshot from:", data.snapshot);
+                snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}`;
+            } else {
+                console.log("No snapshot URL provided. Using placeholder.");
+                snapshotImg.src = 'https://placehold.co/150x225.png';
+                snapshotImg.setAttribute('data-ai-hint', 'anime art');
+            }
+            
+            snapshotImg.onerror = function() {
+                console.error("Failed to load snapshot image. Using placeholder.");
+                this.src = 'https://placehold.co/150x225.png';
+                this.setAttribute('data-ai-hint', 'anime art error');
+            };
+            contentWrapper.appendChild(snapshotImg);
+
+            const mediaInfoDiv = document.createElement('div');
+            mediaInfoDiv.className = 'media-info';
+
+            const titleElement = document.createElement('h3');
+            titleElement.className = 'media-title';
+            titleElement.textContent = data.title ? `${data.title} - Episode ${data.episode}` : 'Anime Title Not Available';
+            mediaInfoDiv.appendChild(titleElement);
+
+            if (data.playUrl) {
+                const playLink = document.createElement('a');
+                playLink.href = data.playUrl;
+                playLink.target = "_blank";
+                playLink.className = 'download-option play-now';
+                playLink.innerHTML = '<i class="fas fa-play"></i> Play Now';
+                mediaInfoDiv.appendChild(playLink);
+            }
+            
+            const downloadOptionsContainer = document.createElement('div');
+            downloadOptionsContainer.className = 'download-options-container';
+
+            if (data.links) {
+                if (data.links.sub && Object.keys(data.links.sub).length > 0) {
+                    const subSection = createLinksSection('Subtitled Downloads', data.links.sub);
+                    downloadOptionsContainer.appendChild(subSection);
+                }
+                if (data.links.dub && Object.keys(data.links.dub).length > 0) {
+                    const dubSection = createLinksSection('Dubbed Downloads', data.links.dub);
+                    downloadOptionsContainer.appendChild(dubSection);
+                }
+
+                if (!downloadOptionsContainer.hasChildNodes()) {
+                     const noLinksMessage = document.createElement('p');
+                     noLinksMessage.textContent = 'No download links available for this episode.';
+                     noLinksMessage.className = 'no-links';
+                     downloadOptionsContainer.appendChild(noLinksMessage);
+                }
+            } else {
+                const noLinksMessage = document.createElement('p');
+                noLinksMessage.textContent = 'Download links information is missing.';
+                noLinksMessage.className = 'no-links';
+                downloadOptionsContainer.appendChild(noLinksMessage);
+            }
+            mediaInfoDiv.appendChild(downloadOptionsContainer);
+            
+            contentWrapper.appendChild(mediaInfoDiv);
+            mediaCard.appendChild(contentWrapper);
+        }
+
+        function createLinksSection(headerText, linksObject) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'download-links-section';
+
+            const header = document.createElement('h4');
+            header.className = 'links-header';
+            header.textContent = headerText;
+            sectionDiv.appendChild(header);
+
+            const downloadOptions = document.createElement('div');
+            downloadOptions.className = 'download-options';
+
+            const sortedQualities = Object.keys(linksObject)
+                .filter(key => key.endsWith('_download')) // Only actual download links
+                .sort((a, b) => { // Sort by quality (e.g., 360p, 720p, 1080p)
+                    const numA = parseInt(a);
+                    const numB = parseInt(b);
+                    return numA - numB;
+                });
+
+            if (sortedQualities.length === 0) {
+                 const noLinksMessage = document.createElement('p');
+                 noLinksMessage.textContent = 'No direct download links found.';
+                 noLinksMessage.className = 'no-links-small';
+                 downloadOptions.appendChild(noLinksMessage);
+            } else {
+                sortedQualities.forEach(quality => {
+                    const url = linksObject[quality];
+                    const qualityLabel = quality.replace('_download', '');
+                    const linkElement = document.createElement('a');
+                    linkElement.href = url;
+                    linkElement.target = '_blank'; // Open in new tab
+                    linkElement.className = 'download-option';
+                    linkElement.innerHTML = `<i class="fas fa-download"></i> ${qualityLabel}`;
+                    downloadOptions.appendChild(linkElement);
+                });
+            }
+            sectionDiv.appendChild(downloadOptions);
+            return sectionDiv;
+        }
+
+        function displayError(message) {
+            loadingState.classList.remove('active');
+            resultsContainer.classList.remove('active');
+            mediaCardPlaceholder.style.display = 'block';
+            mediaCard.innerHTML = '';
+            mediaCard.appendChild(mediaCardPlaceholder);
+
+
+            errorTextSpan.textContent = message;
+            errorMessageDiv.classList.add('active');
+            setTimeout(() => { // Optionally hide error after some time
+                 errorMessageDiv.classList.remove('active');
+            }, 7000);
+        }
+
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const isActive = question.classList.contains('active');
+                faqQuestions.forEach(q => q.classList.remove('active'));
+                if (!isActive) {
+                    question.classList.add('active');
+                }
+            });
+        });
+
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    </script>
+</body>
+</html>
