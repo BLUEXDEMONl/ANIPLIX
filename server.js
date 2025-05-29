@@ -1,4 +1,3 @@
-
 const express = require('express');
 const axios = require('axios');
 const path =require('path');
@@ -25,7 +24,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime.html', (req, res) => {
+app.get('/anime', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
