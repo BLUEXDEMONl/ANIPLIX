@@ -1,6 +1,7 @@
+
 const express = require('express');
 const axios = require('axios');
-const path = require('path');
+const path =require('path');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
 app.get('/login', (req, res) => {
@@ -24,7 +25,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime', (req, res) => {
+app.get('/anime.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
@@ -171,6 +172,7 @@ app.get('/api/search-anime', async (req, res) => {
 
 app.get('/api/image-proxy', async (req, res) => {
     const imageUrl = req.query.url;
+    console.log(`Proxying image request for URL: ${imageUrl}`);
 
     if (!imageUrl) {
         console.log('Image proxy request with no URL');
@@ -178,10 +180,11 @@ app.get('/api/image-proxy', async (req, res) => {
     }
 
     try {
-        console.log(`Proxying image: ${imageUrl}`);
+        console.log(`Attempting to fetch image from: ${imageUrl}`);
         const response = await axios.get(imageUrl, {
             responseType: 'arraybuffer',
         });
+        console.log(`Successfully fetched image. Content-Type: ${response.headers['content-type']}, Length: ${response.data.length}`);
 
         const contentType = response.headers['content-type'];
         if (contentType) {
@@ -206,7 +209,7 @@ app.get('/api/image-proxy', async (req, res) => {
             console.error('External Image Source - Data (first 100 chars):', String(error.response.data).substring(0,100));
             return res.status(error.response.status || 500).send('Error fetching image from source via proxy.');
         } else if (error.request) {
-            console.error('External Image Source - No response received for:', imageUrl);
+            console.error('External Image Source - No response received for:', imageUrl, error.code);
             return res.status(503).send('Service unavailable: No response from image source via proxy.');
         } else {
             console.error('Axios request setup error for image proxy:', error.message);
@@ -345,7 +348,6 @@ app.get('/api/new-anime', async (req, res) => {
     }
 });
 
-// Catch-all 404 handler - must be the last route
 app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
@@ -353,4 +355,17 @@ app.use((req, res, next) => {
 
 app.listen(PORT, () => {
     console.log(`Express server is listening on http://localhost:${PORT}`);
+    console.log(`Access the main anime page (redirects to login if not auth) at: http://localhost:${PORT}/`);
+    console.log(`Access the login page at: http://localhost:${PORT}/login`);
+    console.log(`Access the signup page at: http://localhost:${PORT}/signup`);
+    console.log(`Access the anime search page directly at: http://localhost:${PORT}/anime.html`);
+    console.log(`Access the random anime page at: http://localhost:${PORT}/random`);
+    console.log(`Access the new anime page at: http://localhost:${PORT}/new`);
+    console.log(`API for user signup: POST http://localhost:${PORT}/api/signup`);
+    console.log(`API for user login: POST http://localhost:${PORT}/api/login`);
+    console.log(`API for anime search: GET http://localhost:${PORT}/api/search-anime?animename=youranimename&episode=yourepisode`);
+    console.log(`Image proxy endpoint: GET http://localhost:${PORT}/api/image-proxy?url=imageurl`);
+    console.log(`Random anime API: GET http://localhost:${PORT}/api/random-anime`);
+    console.log(`New anime API: GET http://localhost:${PORT}/api/new-anime`);
 });
+
