@@ -14,8 +14,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
+app.get('/anime.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'anime.html'));
+});
+
 app.get('/random', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'random.html'));
+});
+
+app.get('/new', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'new.html'));
 });
 
 app.get('/api/search-anime', async (req, res) => {
@@ -72,6 +80,7 @@ app.get('/api/image-proxy', async (req, res) => {
     const imageUrl = req.query.url;
 
     if (!imageUrl) {
+        console.log('Image proxy request with no URL');
         return res.status(400).send('Image URL is required');
     }
 
@@ -124,8 +133,6 @@ app.get('/api/random-anime', async (req, res) => {
         const finalUrl = response.request.res.responseUrl || scrapeUrl;
         let htmlData = response.data;
 
-        // Check if the initial response is very short (likely a redirect page) or if it doesn't contain expected content,
-        // and if the final URL is different from the initial scrape URL.
         if (response.data.length < 1000 && finalUrl !== scrapeUrl && !response.data.includes('infotitle c')) {
              console.log(`Initial fetch from random.php was short or a redirect page, attempting to fetch final URL: ${finalUrl}`);
              const finalResponse = await axios.get(finalUrl, {
@@ -146,7 +153,6 @@ app.get('/api/random-anime', async (req, res) => {
         if (poster) {
             fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
         } else {
-             // Fallback selector if 'img.posterimg' is not found
              poster = $('div.ani_detail_img_contain_bottom_left_img_out').find('img').attr('src') || $('meta[property="og:image"]').attr('content');
              if(poster){
                 fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
@@ -191,13 +197,69 @@ app.get('/api/random-anime', async (req, res) => {
     }
 });
 
+app.get('/api/new-anime', async (req, res) => {
+    const scrapeUrl = "https://animeheaven.me/new.php";
+    try {
+        const response = await axios.get(scrapeUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
+        });
+        const $ = cheerio.load(response.data);
+        const animeList = [];
+
+        $('.chart.bc1').each((i, el) => {
+            const imagePath = $(el).find('img.coverimg').attr('src');
+            const englishName = $(el).find('.charttitle a').text().trim();
+            const japaneseName = $(el).find('.charttitlejp').text().trim() || 'Not available';
+            const time = $(el).find('.charttimer.c2').text().trim();
+
+            let imageUrl = 'https://placehold.co/200x300.png'; // Default placeholder
+            if (imagePath) {
+                if (imagePath.startsWith('http')) {
+                    imageUrl = imagePath;
+                } else {
+                    imageUrl = `https://animeheaven.me${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+                }
+            }
+            
+            if (englishName) { // Only add if there's an English name (basic validation)
+                 animeList.push({
+                    image: imageUrl,
+                    englishName,
+                    japaneseName,
+                    time: time || 'N/A'
+                });
+            }
+        });
+        
+        if (animeList.length === 0) {
+            console.warn('No new anime found or failed to parse from AnimeHeaven new.php');
+            return res.status(404).json({ message: 'No new anime found or page structure might have changed.' });
+        }
+
+        res.json(animeList);
+    } catch (error) {
+        console.error('Error in /api/new-anime endpoint:', error.message);
+        if (error.response) {
+             console.error('Error response data (new-anime):', error.response.data ? String(error.response.data).substring(0, 200) + '...' : 'No response data');
+             console.error('Error response status (new-anime):', error.response.status);
+        } else {
+            console.error(error.stack);
+        }
+        res.status(500).json({ message: 'Server error while fetching new anime: ' + error.message });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Express server is listening on http://localhost:${PORT}`);
     console.log(`Access the anime search page at: http://localhost:${PORT}/`);
     console.log(`Access the random anime page at: http://localhost:${PORT}/random`);
+    console.log(`Access the new anime page at: http://localhost:${PORT}/new`);
     console.log(`API for anime search: http://localhost:${PORT}/api/search-anime?animename=youranimename&episode=yourepisode`);
     console.log(`Image proxy endpoint: http://localhost:${PORT}/api/image-proxy?url=imageurl`);
     console.log(`Random anime API: http://localhost:${PORT}/api/random-anime`);
+    console.log(`New anime API: http://localhost:${PORT}/api/new-anime`);
 });
+    
+
     
