@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Anime Releases - Aniplix</title>
+    <title>Anime Details - Aniplix</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -23,8 +23,6 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --success-color: #4CAF50;
-            --warning-color: #FFC107;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -50,8 +48,7 @@
         .logo:hover { transform: scale(1.02); }
         .logo-icon { width: 2.2rem; height: 2.2rem; animation: pulse 2s infinite; color: var(--primary-light); }
         .logo-text { font-size: 1.8rem; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 10px rgba(225, 48, 108, 0.3); }
-        .header-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .tagline { color: var(--text-secondary); font-size: 1rem; background: rgba(255, 255, 255, 0.05); padding: 8px 15px; border-radius: 50px; border: 1px solid var(--glass-border); }
+        .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .header-btn {
             background: transparent;
             border: 2px solid var(--primary-color);
@@ -69,70 +66,96 @@
         }
         .header-btn:hover { background: var(--primary-color); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(225, 48, 108, 0.3); }
         .header-btn i { font-size: 1rem; }
-        .main-container { max-width: 1200px; width: 100%; margin: 0 auto; background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px; box-shadow: var(--shadow); transition: var(--transition); }
-        .main-container:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); }
-        .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; text-align: center; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .main-container { max-width: 900px; width: 100%; margin: 0 auto; background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow); }
         
-        #newAnimeListContainer { display: flex; flex-direction: column; gap: 25px; }
-        .new-anime-card {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column; /* Stack on small screens */
-            gap: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: var(--transition);
-            border: 1px solid transparent;
-            cursor: pointer;
-        }
-        .new-anime-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            border-color: var(--primary-color);
-        }
-        .new-anime-image-container {
-            width: 100%; /* Full width on small screens */
-            max-width: 300px; /* Max width for image on larger screens */
-            flex-shrink: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: var(--darker-bg); /* Placeholder bg */
-            align-self: center; /* Center on small screens */
-        }
-        .new-anime-card img {
-            width: 100%;
-            height: auto;
-            max-height: 220px; /* Adjusted for better visibility */
-            object-fit: contain; /* Show full image, might letterbox */
-            display: block;
-        }
-        .new-anime-details {
-            flex-grow: 1;
+        .anime-detail-card {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            text-align: center; /* Center text on small screens */
+            gap: 25px;
         }
-        .new-anime-title { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
-        .new-anime-jp { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px; font-style: italic; }
-        .new-anime-time { font-size: 0.9rem; color: var(--accent-color); background: rgba(62, 166, 255, 0.1); padding: 5px 10px; border-radius: 5px; display: inline-block; }
+        .anime-detail-poster-container {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto; /* Center on small screens */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+        }
+        .anime-detail-poster {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+        .anime-detail-info {
+            flex-grow: 1;
+        }
+        .anime-title-main {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .anime-title-jp {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .anime-summary {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .anime-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .meta-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .meta-item strong { color: var(--accent-color); }
+        .anime-tags-container { margin-top: 10px; }
+        .anime-tags-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
+        .anime-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tag-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
 
         @media (min-width: 768px) {
-            .new-anime-card {
-                flex-direction: row; /* Side-by-side on larger screens */
-                align-items: center; /* Align items vertically */
+            .anime-detail-card {
+                flex-direction: row;
+                align-items: flex-start;
             }
-            .new-anime-image-container {
-                width: 250px; /* Fixed width for image container on larger screens */
-                align-self: flex-start;
+            .anime-detail-poster-container {
+                width: 280px; /* Fixed width on larger screens */
+                margin: 0;
+                flex-shrink: 0;
             }
-            .new-anime-details {
-                text-align: left; /* Align text to left on larger screens */
-                padding-left: 20px;
+            .anime-detail-info {
+                padding-left: 25px;
             }
-             .new-anime-card img {
-                max-height: 180px; /* Adjust height for row layout */
+             .anime-title-main, .anime-title-jp {
+                text-align: left;
             }
         }
 
@@ -165,7 +188,6 @@
         @keyframes page-3 { 15% { transform: rotateY(180deg); opacity: 0; } 35% { opacity: 1; } 50%, 100% { opacity: 0; } 65%, 100% { transform: rotateY(0deg); } }
         @keyframes page-4 { 30% { transform: rotateY(180deg); opacity: 0; } 50% { opacity: 1; } 65%, 100% { opacity: 0; } 80%, 100% { transform: rotateY(0deg); } }
         @keyframes page-5 { 45% { transform: rotateY(180deg); opacity: 0; } 65% { opacity: 1; } 80%, 100% { opacity: 0; } 95%, 100% { transform: rotateY(0deg); } }
-        .loading-text-custom { color: var(--text-secondary); font-size: 1.1rem; text-align: center; margin-top: 10px; }
         .error-message { display: none; background: rgba(225, 48, 108, 0.1); border: 1px solid var(--primary-color); color: var(--text-primary); padding: 18px; border-radius: 15px; margin-top: 25px; text-align: center; }
         .error-message.active { display: block; animation: fadeIn 0.5s ease, shake 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -174,7 +196,7 @@
         .footer::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(to right, transparent, var(--glass-border), transparent); }
         .creator { color: var(--accent-color); text-decoration: none; transition: var(--transition); font-weight: 500; }
         .creator:hover { text-decoration: underline; color: var(--primary-color); }
-        @media (max-width: 992px) { .main-container { padding: 30px; } .header { flex-direction: column; gap: 20px; text-align: center; } .logo { justify-content: center; } .header-actions { justify-content: center; } }
+        @media (max-width: 992px) { .main-container { padding: 30px; } .header { flex-direction: column; gap: 20px; text-align: center; } .logo { justify-content: center; } .header-actions { justify-content: center;}}
         @media (max-width: 768px) { .main-container { padding: 25px; } .logo-text { font-size: 1.5rem; } }
     </style>
 </head>
@@ -193,19 +215,17 @@
 
     <header class="header">
         <a href="/anime.html" class="logo">
-            <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
+             <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
             <span class="logo-text">Aniplix</span>
         </a>
         <div class="header-actions">
-            <span class="tagline">Latest Anime Updates</span>
+            <a href="/new" class="header-btn"><i class="fas fa-arrow-left"></i> Back to New Releases</a>
             <a href="/anime.html" class="header-btn"><i class="fas fa-search"></i> Back to Search</a>
         </div>
     </header>
 
     <main class="main-container">
-        <h1 class="page-title">Latest Anime Releases</h1>
-        
-        <div id="loadingState" class="loading">
+        <div id="loadingState" class="loading active"> <!-- Initially active -->
             <div class="loader">
                 <div>
                     <ul>
@@ -217,13 +237,28 @@
                         <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
                     </ul>
                 </div>
-                <span>Loading New Anime...</span>
+                <span>Loading Anime Details...</span>
             </div>
-            <p class="loading-text-custom"></p>
         </div>
         <div id="errorMessage" class="error-message"></div>
-        <div id="newAnimeListContainer">
-            <!-- New anime cards will be injected here -->
+        <div id="animeDetailContainer" class="anime-detail-card" style="display: none;">
+            <div class="anime-detail-poster-container">
+                <img id="animePoster" src="" alt="Anime Poster" class="anime-detail-poster" data-ai-hint="anime poster">
+            </div>
+            <div class="anime-detail-info">
+                <h1 id="animeTitleMain" class="anime-title-main"></h1>
+                <p id="animeTitleJp" class="anime-title-jp"></p>
+                <p id="animeSummary" class="anime-summary"></p>
+                <div class="anime-meta-grid">
+                    <div class="meta-item"><strong>Episodes:</strong> <span id="animeEpisodes"></span></div>
+                    <div class="meta-item"><strong>Year:</strong> <span id="animeYear"></span></div>
+                    <div class="meta-item"><strong>Rating:</strong> <span id="animeRating"></span></div>
+                </div>
+                <div class="anime-tags-container">
+                    <h3 class="anime-tags-title">Tags:</h3>
+                    <div id="animeTags" class="anime-tags"></div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -232,89 +267,74 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            fetchNewAnime();
-        });
+            
+            const loadingState = document.getElementById('loadingState');
+            const errorMessageDiv = document.getElementById('errorMessage');
+            const animeDetailContainer = document.getElementById('animeDetailContainer');
 
-        const loadingState = document.getElementById('loadingState');
-        const errorMessageDiv = document.getElementById('errorMessage');
-        const newAnimeListContainer = document.getElementById('newAnimeListContainer');
+            const params = new URLSearchParams(window.location.search);
+            const animeUrl = params.get('url');
 
-        async function fetchNewAnime() {
-            loadingState.classList.add('active');
-            errorMessageDiv.classList.remove('active');
-            errorMessageDiv.textContent = '';
-            newAnimeListContainer.innerHTML = '';
+            if (!animeUrl) {
+                errorMessageDiv.textContent = 'No anime URL provided. Please go back and select an anime.';
+                errorMessageDiv.classList.add('active');
+                loadingState.classList.remove('active');
+                return;
+            }
 
             try {
-                const response = await fetch('/api/new-anime');
+                const response = await fetch(`/api/anime-details?url=${encodeURIComponent(animeUrl)}`);
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ message: 'Failed to fetch new anime list. Server returned an error.' }));
+                    const errorData = await response.json().catch(() => ({ message: 'Failed to fetch anime details. Server returned an error.' }));
                     throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
                 }
-                const animeList = await response.json();
-                displayNewAnime(animeList);
+                const details = await response.json();
+                displayAnimeDetails(details);
             } catch (error) {
-                console.error('Error fetching new anime:', error);
-                errorMessageDiv.textContent = error.message || 'Could not fetch new anime releases. Please try again later.';
+                console.error('Error fetching anime details:', error);
+                errorMessageDiv.textContent = error.message || 'Could not fetch anime details. Please try again later.';
                 errorMessageDiv.classList.add('active');
             } finally {
                 loadingState.classList.remove('active');
             }
-        }
+        });
 
-        function displayNewAnime(animeList) {
-            if (!animeList || animeList.length === 0) {
-                newAnimeListContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No new anime found at the moment.</p>';
+        function displayAnimeDetails(details) {
+            const animeDetailContainer = document.getElementById('animeDetailContainer');
+            if (!details) {
+                document.getElementById('errorMessage').textContent = 'Could not load anime details.';
+                document.getElementById('errorMessage').classList.add('active');
                 return;
             }
 
-            animeList.forEach(anime => {
-                const card = document.createElement('div');
-                card.className = 'new-anime-card';
-                card.setAttribute('data-anime-link', anime.link); // Store link for click event
+            document.getElementById('animePoster').src = details.poster ? `/api/image-proxy?url=${encodeURIComponent(details.poster)}` : 'https://placehold.co/300x450.png';
+            document.getElementById('animePoster').onerror = function() { this.src = 'https://placehold.co/300x450.png'; this.setAttribute('data-ai-hint', 'anime art'); };
+            
+            document.getElementById('animeTitleMain').textContent = details.englishName || 'N/A';
+            document.getElementById('animeTitleJp').textContent = details.japaneseName || 'N/A';
+            document.getElementById('animeSummary').textContent = details.summary || 'No summary available.';
+            document.getElementById('animeEpisodes').textContent = details.episodes || 'N/A';
+            document.getElementById('animeYear').textContent = details.year || 'N/A';
+            document.getElementById('animeRating').textContent = details.rating || 'N/A';
 
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'new-anime-image-container';
-                
-                const img = document.createElement('img');
-                const placeholderImage = `https://placehold.co/300x170.png`; // Adjusted placeholder
-                img.src = anime.image ? `/api/image-proxy?url=${encodeURIComponent(anime.image)}` : placeholderImage;
-                img.alt = anime.englishName || 'Anime Poster';
-                img.setAttribute('data-ai-hint', 'anime art');
-                img.onerror = function() { this.src = placeholderImage; };
-                imageContainer.appendChild(img);
-
-                const detailsDiv = document.createElement('div');
-                detailsDiv.className = 'new-anime-details';
-
-                const titleEl = document.createElement('h3');
-                titleEl.className = 'new-anime-title';
-                titleEl.textContent = anime.englishName || 'Title Not Available';
-                detailsDiv.appendChild(titleEl);
-
-                const jpTitleEl = document.createElement('p');
-                jpTitleEl.className = 'new-anime-jp';
-                jpTitleEl.textContent = anime.japaneseName || '';
-                detailsDiv.appendChild(jpTitleEl);
-
-                const timeEl = document.createElement('p');
-                timeEl.className = 'new-anime-time';
-                timeEl.innerHTML = `<i class="fas fa-clock"></i> ${anime.time || 'N/A'}`;
-                detailsDiv.appendChild(timeEl);
-                
-                card.appendChild(imageContainer);
-                card.appendChild(detailsDiv);
-
-                card.addEventListener('click', () => {
-                    const animeLink = card.getAttribute('data-anime-link');
-                    if (animeLink) {
-                        window.location.href = `/new-detail?url=${encodeURIComponent(animeLink)}`;
-                    }
+            const tagsContainer = document.getElementById('animeTags');
+            tagsContainer.innerHTML = ''; // Clear previous tags
+            if (details.tags && details.tags.length > 0 && details.tags[0] !== "N/A") {
+                details.tags.forEach(tagText => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag-badge';
+                    tagEl.textContent = tagText;
+                    tagsContainer.appendChild(tagEl);
                 });
-                newAnimeListContainer.appendChild(card);
-            });
+            } else {
+                const noTagsEl = document.createElement('span');
+                noTagsEl.textContent = 'No tags available.';
+                noTagsEl.style.color = 'var(--text-secondary)';
+                tagsContainer.appendChild(noTagsEl);
+            }
+            animeDetailContainer.style.display = 'flex';
         }
     </script>
 </body>
