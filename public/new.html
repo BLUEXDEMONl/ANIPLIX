@@ -177,12 +177,12 @@
     </div>
 
     <header class="header">
-        <a href="/anime" class="logo">
+        <a href="/anime.html" class="logo">
             <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
             <span class="logo-text">Aniplix</span>
         </a>
         <div class="header-actions">
-            <a href="/anime" class="header-action-secondary-btn">
+            <a href="/anime.html" class="header-action-secondary-btn">
                 <i class="fas fa-search"></i> Back to Search
             </a>
         </div>
@@ -224,7 +224,7 @@
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             if (localStorage.getItem('isLoggedInAniplix') !== 'true') {
-                window.location.href = '/login';
+                window.location.href = '/login.html';
                 return;
             }
 
@@ -243,7 +243,7 @@
                 animeList.forEach(anime => {
                     const card = document.createElement('a'); // Make card an anchor tag
                     card.className = 'new-anime-card';
-                    card.href = `/new-detail?url=${encodeURIComponent(anime.link)}`; // Set link to detail page
+                    card.href = `/new-detail.html?url=${encodeURIComponent(anime.link)}`; // Set link to detail page
                     
                     let placeholderImage = `https://placehold.co/400x225.png`;
                     let imageHtml = `<img src="${placeholderImage}" data-ai-hint="anime art" alt="Poster for ${anime.englishName || 'Anime'}">`;

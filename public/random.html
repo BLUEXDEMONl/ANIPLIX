@@ -212,12 +212,12 @@
     </div>
 
     <header class="header">
-        <a href="/anime" class="logo">
+        <a href="/anime.html" class="logo">
             <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
             <span class="logo-text">Aniplix</span>
         </a>
         <div class="header-actions">
-            <a href="/anime" class="header-action-secondary-btn">
+            <a href="/anime.html" class="header-action-secondary-btn">
                 <i class="fas fa-search"></i> Back to Search
             </a>
         </div>
@@ -256,7 +256,7 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://wa.me/2347041039367" target="_blank" class="creator">BLUE DEMON</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://github.com/lakshaykamat" target="_blank" class="creator">Lakshay Kamat</a>.</p>
     </footer>
 
     <script>
@@ -264,7 +264,7 @@
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             if (localStorage.getItem('isLoggedInAniplix') !== 'true') {
-                window.location.href = '/login';
+                window.location.href = '/login.html';
                 return; 
             }
             

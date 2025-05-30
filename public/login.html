@@ -119,11 +119,11 @@
             </div>
             <button type="submit" class="auth-btn">Login</button>
         </form>
-        <p class="auth-link">Don't have an account? <a href="/signup">Sign Up</a></p>
+        <p class="auth-link">Don't have an account? <a href="/signup.html">Sign Up</a></p>
     </div>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://wa.me/2347041039367" target="_blank" class="creator">BLUE DEMON</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://github.com/lakshay-art" target="_blank" class="creator">BLUE DEMON</a>.</p>
     </footer>
 
     <script>
@@ -157,7 +157,7 @@
                         localStorage.setItem('isLoggedInAniplix', 'true');
                         // Wait a bit before redirecting to show success message
                         setTimeout(() => {
-                            window.location.href = data.redirectTo || '/anime';
+                            window.location.href = data.redirectTo || '/anime.html';
                         }, 1000);
                     } else {
                         showMessage(data.message || 'Login failed. Please try again.', 'error');
