@@ -592,7 +592,7 @@
     </div>
 
     <header class="header">
-        <a href="/anime.html" class="logo"> <!-- Ensure this links to anime.html if it's the main search page -->
+        <a href="/anime" class="logo"> <!-- Ensure this links to anime if it's the main search page -->
             <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
             <span class="logo-text">Aniplix</span>
         </a>
@@ -610,7 +610,7 @@
     <main class="main-container">
         <form id="animeForm" class="download-form">
             <div class="input-group">
-                <input type="text" id="animename" class="url-input" placeholder="e.g., Solo Leveling or Naruto epi 10 (episode defaults to 1)" required>
+                <input type="text" id="animename" class="url-input" placeholder="Search for your favorite anime" required>
             </div>
             <button type="submit" class="download-btn">
                 <i class="fas fa-search"></i> Search Anime
@@ -712,7 +712,7 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://github.com/t-txt" target="_blank" class="creator">T-TXT</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://wa.me/2347041039367" target="_blank" class="creator">BLUE DEMON</a>.</p>
         <div class="social-links">
             <a href="#" class="social-link"><i class="fab fa-github"></i></a>
             <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -723,7 +723,7 @@
     <script>
         // Client-side auth check
         if (localStorage.getItem('isLoggedInAniplix') !== 'true') {
-            window.location.href = '/login.html';
+            window.location.href = '/login';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -909,7 +909,7 @@
                     const linksKey = `aniplix_links_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
                     try {
                         sessionStorage.setItem(linksKey, JSON.stringify(data.links));
-                        const streamDwlUrl = `/stream-dwl.html?title=${encodeURIComponent(data.title)}&episode=${encodeURIComponent(data.episode)}&snapshot=${encodeURIComponent(data.snapshot || '')}&linksKey=${linksKey}`;
+                        const streamDwlUrl = `/stream-dwl?title=${encodeURIComponent(data.title)}&episode=${encodeURIComponent(data.episode)}&snapshot=${encodeURIComponent(data.snapshot || '')}&linksKey=${linksKey}`;
                         window.location.href = streamDwlUrl;
                     } catch (e) {
                         console.error("Error storing links in sessionStorage:", e);
@@ -939,7 +939,7 @@
                         suggestions.forEach(anime => {
                             const suggestionCard = document.createElement('a');
                             suggestionCard.className = 'suggestion-card';
-                            suggestionCard.href = `/new-detail.html?url=${encodeURIComponent(anime.link)}`;
+                            suggestionCard.href = `/new-detail?url=${encodeURIComponent(anime.link)}`;
 
                             const img = document.createElement('img');
                             img.src = anime.image ? `/api/image-proxy?url=${encodeURIComponent(anime.image)}` : 'https://placehold.co/160x200.png?text=N/A';
