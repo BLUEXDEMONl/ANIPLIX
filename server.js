@@ -1,16 +1,40 @@
+
 const express = require('express');
 const axios = require('axios');
-const path =require('path');
+const path = require('path');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const DB_PATH = path.join(__dirname, 'db.json');
+
+const DB_DIR = path.join(__dirname, 'database');
+const DB_PATH = path.join(DB_DIR, 'db.json');
+
+const initializeDatabase = async () => {
+    try {
+        if (!fs.existsSync(DB_DIR)) {
+            fs.mkdirSync(DB_DIR, { recursive: true });
+            console.log(`Database directory created at ${DB_DIR}`);
+        }
+        if (!fs.existsSync(DB_PATH)) {
+            fs.writeFileSync(DB_PATH, JSON.stringify({ users: [] }, null, 2), 'utf8');
+            console.log(`db.json created at ${DB_PATH}`);
+        } else {
+            console.log(`db.json already exists at ${DB_PATH}`);
+        }
+    } catch (error) {
+        console.error('Error initializing database:', error);
+        process.exit(1);
+    }
+};
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/media', express.static(path.join(__dirname, 'public', 'media')));
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
@@ -24,7 +48,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime', (req, res) => {
+app.get('/anime.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
@@ -36,13 +60,16 @@ app.get('/new', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'new.html'));
 });
 
+app.get('/new-detail', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'new-detail.html'));
+});
+
 app.post('/api/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Username, email, and password are required' });
     }
-
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ message: 'Invalid email format' });
     }
@@ -55,7 +82,6 @@ app.post('/api/signup', async (req, res) => {
             console.error('Error reading db.json:', err);
             return res.status(500).json({ message: 'Server error during signup (read)' });
         }
-
         const db = JSON.parse(data);
         const existingUserByUsername = db.users.find(user => user.username === username);
         if (existingUserByUsername) {
@@ -65,11 +91,10 @@ app.post('/api/signup', async (req, res) => {
         if (existingUserByEmail) {
             return res.status(409).json({ message: 'Email already registered' });
         }
-
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            db.users.push({ username, email, password: hashedPassword });
-
+            const userId = uuidv4();
+            db.users.push({ id: userId, username, email, password: hashedPassword });
             fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), 'utf8', (writeErr) => {
                 if (writeErr) {
                     console.error('Error writing to db.json:', writeErr);
@@ -85,25 +110,20 @@ app.post('/api/signup', async (req, res) => {
 });
 
 app.post('/api/login', (req, res) => {
-    const { identifier, password } = req.body; 
-
+    const { identifier, password } = req.body;
     if (!identifier || !password) {
         return res.status(400).json({ message: 'Username/Email and password are required' });
     }
-
     fs.readFile(DB_PATH, 'utf8', async (err, data) => {
         if (err) {
             console.error('Error reading db.json:', err);
             return res.status(500).json({ message: 'Server error during login (read)' });
         }
-
         const db = JSON.parse(data);
         const user = db.users.find(u => u.username === identifier || u.email === identifier);
-
         if (!user) {
             return res.status(401).json({ message: 'Invalid username/email or password' });
         }
-
         try {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
@@ -120,38 +140,29 @@ app.post('/api/login', (req, res) => {
 
 app.get('/api/search-anime', async (req, res) => {
     const { animename, episode } = req.query;
-
     if (!animename) {
         return res.status(400).json({ message: 'Anime name is required' });
     }
     const effectiveEpisode = episode || "1";
-
     const externalApiUrl = `https://txtorg-anihx.hf.space/api/episode?anime=${encodeURIComponent(animename)}&ep=${encodeURIComponent(effectiveEpisode)}`;
     console.log(`Attempting to fetch from external API: ${externalApiUrl}`);
-
     try {
         const apiResponse = await axios.get(externalApiUrl);
-
         if (typeof apiResponse.data !== 'object' || apiResponse.data === null) {
             console.error('Unexpected response format from external API (not an object):', apiResponse.data);
             return res.status(500).json({ message: 'Received invalid data format from anime API.' });
         }
-        
         if (apiResponse.data.detail && typeof apiResponse.data.detail === 'string' && (!apiResponse.data.title || !apiResponse.data.links)) {
             console.warn(`External API (200 OK) reported: ${apiResponse.data.detail} for ${animename} ep ${effectiveEpisode}`);
             return res.status(404).json({ message: apiResponse.data.detail });
         }
-        
         const subLinksExist = apiResponse.data.links && apiResponse.data.links.sub && Object.keys(apiResponse.data.links.sub).length > 0;
         const dubLinksExist = apiResponse.data.links && apiResponse.data.links.dub && Object.keys(apiResponse.data.links.dub).length > 0;
-
         if (!apiResponse.data.title || !(subLinksExist || dubLinksExist)) {
              console.warn('Unexpected response structure from external API (200 OK, but critical data missing):', apiResponse.data);
              return res.status(404).json({ message: `Anime "${animename}" episode ${effectiveEpisode} not found or no download links available.` });
         }
-        
         res.json(apiResponse.data);
-
     } catch (error) {
         console.error(`Error in /api/search-anime proxy request for animename: ${animename}, episode: ${effectiveEpisode}:`);
         if (error.response) {
@@ -171,33 +182,24 @@ app.get('/api/search-anime', async (req, res) => {
 
 app.get('/api/image-proxy', async (req, res) => {
     const imageUrl = req.query.url;
-    console.log(`Proxying image request for URL: ${imageUrl}`);
-
     if (!imageUrl) {
         console.log('Image proxy request with no URL');
         return res.status(400).send('Image URL is required');
     }
-
     try {
-        console.log(`Attempting to fetch image from: ${imageUrl}`);
         const response = await axios.get(imageUrl, {
             responseType: 'arraybuffer',
         });
-        console.log(`Successfully fetched image. Content-Type: ${response.headers['content-type']}, Length: ${response.data.length}`);
-
         const contentType = response.headers['content-type'];
         if (contentType) {
             res.setHeader('Content-Type', contentType);
         } else {
-            console.warn(`Content-Type missing for proxied image: ${imageUrl}. Attempting to infer.`);
             if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) {
                 res.setHeader('Content-Type', 'image/jpeg');
             } else if (imageUrl.endsWith('.png')) {
                 res.setHeader('Content-Type', 'image/png');
             } else if (imageUrl.endsWith('.gif')) {
                 res.setHeader('Content-Type', 'image/gif');
-            } else {
-                 console.warn(`Could not infer Content-Type for ${imageUrl}. Browser might not render it correctly.`);
             }
         }
         res.send(response.data);
@@ -223,30 +225,23 @@ app.get('/api/random-anime', async (req, res) => {
         console.log(`Attempting to scrape random anime from: ${scrapeUrl}`);
         const response = await axios.get(scrapeUrl, {
             headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' },
-            maxRedirects: 5 
+            maxRedirects: 5
         });
-        
         const finalUrl = response.request.res.responseUrl || scrapeUrl;
         console.log(`Scraping random anime, final URL after redirects: ${finalUrl}`);
         let htmlData = response.data;
-
         if (response.data.length < 1000 && finalUrl !== scrapeUrl && !response.data.includes('infotitle c')) {
-             console.log(`Initial fetch from random.php was short or a redirect page, attempting to fetch final URL: ${finalUrl}`);
              const finalResponse = await axios.get(finalUrl, {
                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' },
              });
              htmlData = finalResponse.data;
         }
-
         const $ = cheerio.load(htmlData);
-
         const englishName = $('div.infotitle.c').text().trim();
         const japaneseName = $('div.infotitlejp.c').text().trim() || 'Not available';
         const summary = $('div.infodes.c').text().trim();
-
         let poster = $('img.posterimg').attr('src');
         let fullPoster = '';
-
         if (poster) {
             fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
         } else {
@@ -255,17 +250,14 @@ app.get('/api/random-anime', async (req, res) => {
                 fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
              }
         }
-        
         const infoDivs = $('div.infoyear.c div.inline.c2');
         const episodes = $(infoDivs[0]).text().trim() || 'N/A';
         const year = $(infoDivs[1]).text().trim() || 'N/A';
         const rating = $(infoDivs[2]).text().trim() || 'N/A';
-
         const tags = [];
         $('div.infotags.c a div.boxitem').each((_, el) => {
             tags.push($(el).text().trim());
         });
-
         if (!englishName && !summary && !fullPoster) {
             console.error('Failed to scrape essential anime details from AnimeHeaven.', { finalUrl, htmlLength: htmlData.length });
             return res.status(500).json({ message: 'Failed to scrape anime details. The page structure might have changed or no details were found. Please try again.' });
@@ -281,7 +273,6 @@ app.get('/api/random-anime', async (req, res) => {
             rating,
             tags
         });
-
     } catch (error) {
         console.error('Error in /api/random-anime endpoint:', error.message);
         if (error.response) {
@@ -303,12 +294,15 @@ app.get('/api/new-anime', async (req, res) => {
         });
         const $ = cheerio.load(response.data);
         const animeList = [];
-
         $('.chart.bc1').each((i, el) => {
             const imagePath = $(el).find('img.coverimg').attr('src');
             const englishName = $(el).find('.charttitle a').text().trim();
             const japaneseName = $(el).find('.charttitlejp').text().trim() || 'Not available';
             const time = $(el).find('.charttimer.c2').text().trim();
+            
+            const href = $(el).find('.charttitle a').attr('href');
+            const id = href?.split('?')[1] || 'unknown';
+            const animeLink = `https://animeheaven.me/anime.php?${id}`;
 
             let imageUrl = 'https://placehold.co/300x170.png'; 
             if (imagePath) {
@@ -318,9 +312,10 @@ app.get('/api/new-anime', async (req, res) => {
                     imageUrl = `https://animeheaven.me${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
                 }
             }
-            
             if (englishName) { 
                  animeList.push({
+                    id,
+                    link: animeLink,
                     image: imageUrl,
                     englishName,
                     japaneseName,
@@ -328,7 +323,6 @@ app.get('/api/new-anime', async (req, res) => {
                 });
             }
         });
-        
         if (animeList.length === 0) {
             console.warn('No new anime found or failed to parse from AnimeHeaven new.php');
             return res.status(404).json({ message: 'No new anime found or page structure might have changed.' });
@@ -347,24 +341,103 @@ app.get('/api/new-anime', async (req, res) => {
     }
 });
 
+app.get('/api/anime-details', async (req, res) => {
+    const animeUrl = req.query.url;
+    if (!animeUrl) {
+        return res.status(400).json({ message: 'Anime URL is required' });
+    }
+    try {
+        console.log(`Attempting to scrape anime details from: ${animeUrl}`);
+        const response = await axios.get(animeUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
+        });
+        const $ = cheerio.load(response.data);
+
+        const englishName = $('div.infotitle.c').text().trim();
+        const japaneseName = $('div.infotitlejp.c').text().trim() || 'Not available';
+        const summary = $('div.infodes.c').text().trim();
+        let poster = $('img.posterimg').attr('src');
+         let fullPoster = 'https://placehold.co/300x450.png'; 
+        if (poster) {
+            fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
+        } else {
+             poster = $('div.ani_detail_img_contain_bottom_left_img_out').find('img').attr('src') || $('meta[property="og:image"]').attr('content');
+             if(poster){
+                fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
+             }
+        }
+
+        const infoDivs = $('div.infoyear.c div.inline.c2');
+        const episodes = $(infoDivs[0]).text().trim() || 'N/A';
+        const year = $(infoDivs[1]).text().trim() || 'N/A';
+        const rating = $(infoDivs[2]).text().trim() || 'N/A';
+
+        const tags = [];
+        $('div.infotags.c a div.boxitem').each((_, el) => {
+            tags.push($(el).text().trim());
+        });
+
+        if (!englishName && !summary && !fullPoster.includes('animeheaven.me')) { // Check if essential data is missing, allow placeholder
+            console.error('Failed to scrape essential anime details from AnimeHeaven.', { animeUrl });
+            return res.status(500).json({ message: 'Failed to scrape anime details. The page structure might have changed or no details were found.' });
+        }
+
+        res.json({
+            englishName: englishName || "Title not found",
+            japaneseName,
+            summary: summary || "Summary not available.",
+            poster: fullPoster,
+            episodes,
+            year,
+            rating,
+            tags: tags.length > 0 ? tags : ["N/A"]
+        });
+
+    } catch (error) {
+        console.error(`Error in /api/anime-details endpoint for URL ${animeUrl}:`, error.message);
+        if (error.response) {
+             console.error('Error response data:', error.response.data ? String(error.response.data).substring(0, 200) + '...' : 'No response data');
+             console.error('Error response status:', error.response.status);
+        } else {
+            console.error(error.stack);
+        }
+        res.status(500).json({ message: 'Server error while fetching anime details: ' + error.message });
+    }
+});
+
+
 app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Express server is listening on http://localhost:${PORT}`);
-    console.log(`Access the main anime page (redirects to login if not auth) at: http://localhost:${PORT}/`);
-    console.log(`Access the login page at: http://localhost:${PORT}/login`);
-    console.log(`Access the signup page at: http://localhost:${PORT}/signup`);
-    console.log(`Access the anime search page directly at: http://localhost:${PORT}/anime.html`);
-    console.log(`Access the random anime page at: http://localhost:${PORT}/random`);
-    console.log(`Access the new anime page at: http://localhost:${PORT}/new`);
-    console.log(`API for user signup: POST http://localhost:${PORT}/api/signup`);
-    console.log(`API for user login: POST http://localhost:${PORT}/api/login`);
-    console.log(`API for anime search: GET http://localhost:${PORT}/api/search-anime?animename=youranimename&episode=yourepisode`);
-    console.log(`Image proxy endpoint: GET http://localhost:${PORT}/api/image-proxy?url=imageurl`);
-    console.log(`Random anime API: GET http://localhost:${PORT}/api/random-anime`);
-    console.log(`New anime API: GET http://localhost:${PORT}/api/new-anime`);
+app.use((err, req, res, next) => {
+    console.error("Unhandled error:", err);
+    if (req.originalUrl.startsWith('/api/')) {
+        res.status(500).json({ message: 'Internal Server Error. Please try again later.' });
+    } else {
+        res.status(500).send('<h1>Internal Server Error</h1><p>Sorry, something went wrong. Please try again later.</p>');
+    }
 });
 
+initializeDatabase().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Express server is listening on http://localhost:${PORT}`);
+        console.log(`Database file is expected at: ${DB_PATH}`);
+        console.log(`Access the main anime page (redirects to login if not auth) at: http://localhost:${PORT}/`);
+        console.log(`Access the login page at: http://localhost:${PORT}/login`);
+        console.log(`Access the signup page at: http://localhost:${PORT}/signup`);
+        console.log(`Access the anime search page directly at: http://localhost:${PORT}/anime.html`);
+        console.log(`Access the random anime page at: http://localhost:${PORT}/random`);
+        console.log(`Access the new anime page at: http://localhost:${PORT}/new`);
+        console.log(`Access the new anime detail page (example): http://localhost:${PORT}/new-detail?url=ENCODED_ANIME_URL`);
+        console.log(`API for user signup: POST http://localhost:${PORT}/api/signup`);
+        console.log(`API for user login: POST http://localhost:${PORT}/api/login`);
+        console.log(`API for anime search: GET http://localhost:${PORT}/api/search-anime?animename=youranimename&episode=yourepisode`);
+        console.log(`Image proxy endpoint: GET http://localhost:${PORT}/api/image-proxy?url=imageurl`);
+        console.log(`Random anime API: GET http://localhost:${PORT}/api/random-anime`);
+        console.log(`New anime API: GET http://localhost:${PORT}/api/new-anime`);
+        console.log(`Anime Details API: GET http://localhost:${PORT}/api/anime-details?url=ENCODED_ANIME_PAGE_URL`);
+    });
+}).catch(err => {
+    console.error("Failed to initialize database and start server:", err);
+});
