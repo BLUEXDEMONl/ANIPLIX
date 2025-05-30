@@ -53,7 +53,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime', (req, res) => {
+app.get('/anime.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
@@ -132,7 +132,7 @@ app.post('/api/login', (req, res) => {
         try {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
-                res.status(200).json({ message: 'Login successful!', redirectTo: '/anime' });
+                res.status(200).json({ message: 'Login successful!', redirectTo: '/anime.html' });
             } else {
                 res.status(401).json({ message: 'Invalid username/email or password' });
             }
