@@ -1,4 +1,3 @@
-
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
@@ -53,7 +52,7 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/anime.html', (req, res) => {
+app.get('/anime', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'anime.html'));
 });
 
@@ -136,7 +135,7 @@ app.post('/api/login', (req, res) => {
         try {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
-                res.status(200).json({ message: 'Login successful!', redirectTo: '/anime.html' });
+                res.status(200).json({ message: 'Login successful!', redirectTo: '/anime' });
             } else {
                 res.status(401).json({ message: 'Invalid username/email or password' });
             }
@@ -479,7 +478,7 @@ app.get('/api/anime-suggestions', async (req, res) => {
 
             const japaneseName = $(el).find('.charttitlejp').text().trim() || 'N/A'; // Japanese name fallback
             
-            const href = $(el).find('.chartimg a').attr('href'); // Path like 'anime.php?hunter-x-hunter-2011'
+            const href = $(el).find('.chartimg a').attr('href');
             let animeLink = '#'; // Default link
             if (href) {
                 animeLink = `https://animeheaven.me/${href.startsWith('/') ? href.substring(1) : href}`;
@@ -488,8 +487,8 @@ app.get('/api/anime-suggestions', async (req, res) => {
             if (englishName !== 'Name not available' && animeLink !== '#') { // Only add if we have a name and a link
                  allPopularAnime.push({
                     image: imageUrl,
-                    englishName: englishName, // Use English name
-                    japaneseName: japaneseName, // Keep Japanese name for potential future use or display
+                    englishName: englishName,
+                    japaneseName: japaneseName,
                     link: animeLink
                 });
             }
@@ -503,7 +502,7 @@ app.get('/api/anime-suggestions', async (req, res) => {
         // Shuffle the array and pick the first 4
         const selectedSuggestions = [];
         const shuffled = allPopularAnime.sort(() => 0.5 - Math.random()); // Simple shuffle
-        selectedSuggestions.push(...shuffled.slice(0, Math.min(4, shuffled.length))); // Take up to 4
+        selectedSuggestions.push(...shuffled.slice(0, Math.min(8, shuffled.length))); // Take up to 8
         
         cachedSuggestions = selectedSuggestions;
         suggestionsCacheTimestamp = now;
@@ -545,7 +544,7 @@ app.get('/api/resolve-download-link', async (req, res) => {
             });
         } else {
             console.warn(`Failed to resolve or no links found for ${paheWinUrl}. API Response:`, apiResponse.data);
-            // It's possible the resolver returns 200 OK but with an error message or no links
+    
             res.status(404).json({ message: 'Could not resolve download links or no links found.' });
         }
     } catch (error) {
@@ -571,14 +570,11 @@ app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-// General error handler - must be the last app.use()
 app.use((err, req, res, next) => {
-    console.error("Unhandled error:", err); // Log the full error for server-side debugging
-    if (req.originalUrl.startsWith('/api/')) { // Check if the request was for an API endpoint
+    console.error("Unhandled error:", err);
+    if (req.originalUrl.startsWith('/api/')) {
         res.status(500).json({ message: 'Internal Server Error. Please try again later.' });
     } else {
-        // For non-API requests, you might want to send a generic HTML error page
-        // For now, sending simple text/HTML
         res.status(500).send('<h1>Internal Server Error</h1><p>Sorry, something went wrong. Please try again later.</p>');
     }
 });
@@ -586,22 +582,6 @@ app.use((err, req, res, next) => {
 initializeDatabase().then(() => {
     app.listen(PORT, () => {
         console.log(`Express server is listening on http://localhost:${PORT}`);
-        // console.log('Serving public/anime.html at /');
-        // console.log('Serving public/login.html at /login');
-        // console.log('Serving public/signup.html at /signup');
-        // console.log('Serving public/random.html at /random');
-        // console.log('Serving public/new.html at /new');
-        // console.log('Serving public/new-detail.html at /new-detail');
-        // console.log('API /api/signup for user registration');
-        // console.log('API /api/login for user login');
-        // console.log('API /api/search-anime for anime search');
-        // console.log('API /api/image-proxy for serving images');
-        // console.log('API /api/random-anime for random anime suggestions');
-        // console.log('API /api/new-anime for new anime releases');
-        // console.log('API /api/anime-details for specific anime details');
-        // console.log('API /api/anime-suggestions for popular anime suggestions');
-        // console.log('API /api/resolve-download-link for resolving pahe.win links');
-        // console.log('Serving 404.html for undefined routes');
     });
 }).catch(err => {
     console.error("Failed to initialize database and start server:", err);
