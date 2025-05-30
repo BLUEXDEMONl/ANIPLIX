@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniplix - Anime Downloader</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Aniplix - Anime Search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
-            --primary-color: #E1306C;
-            --primary-light: #FD1D1D;
+            --primary-color: #E1306C; /* Instagram Pink/Red */
+            --primary-light: #FD1D1D; /* Instagram Red */
             --gradient: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
             --dark-bg: #0F0F0F;
             --darker-bg: #0A0A0A;
             --light-bg: #1E1E1E;
             --text-primary: #FFFFFF;
             --text-secondary: #AAAAAA;
-            --accent-color: #3EA6FF;
-            --glass-bg: rgba(30, 30, 30, 0.8);
+            --accent-color: #3EA6FF; /* A light blue for accents */
+            --glass-bg: rgba(30, 30, 30, 0.8); /* Darker glass */
             --glass-border: rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -44,6 +46,7 @@
             line-height: 1.6;
         }
 
+        /* Background animation */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -62,42 +65,16 @@
             animation: float 15s infinite ease-in-out;
         }
 
-        .circle-1 {
-            width: 300px;
-            height: 300px;
-            background: #405DE6;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .circle-2 {
-            width: 400px;
-            height: 400px;
-            background: #C13584;
-            top: 60%;
-            left: 70%;
-            animation-delay: 3s;
-        }
-
-        .circle-3 {
-            width: 250px;
-            height: 250px;
-            background: #FD1D1D;
-            top: 30%;
-            left: 50%;
-            animation-delay: 6s;
-        }
+        .circle-1 { width: 300px; height: 300px; background: #405DE6; top: 20%; left: 10%; animation-delay: 0s; }
+        .circle-2 { width: 400px; height: 400px; background: #C13584; top: 60%; left: 70%; animation-delay: 3s; }
+        .circle-3 { width: 250px; height: 250px; background: #FD1D1D; top: 30%; left: 50%; animation-delay: 6s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            50% {
-                transform: translateY(-50px) translateX(50px);
-            }
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50px) translateX(50px); }
         }
 
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -105,6 +82,7 @@
             padding: 20px 0;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            gap: 20px; /* Added gap for better spacing when wrapping */
         }
 
         .logo {
@@ -112,28 +90,23 @@
             align-items: center;
             gap: 10px;
             transition: var(--transition);
-            text-decoration: none;
+            text-decoration: none; /* Ensure logo is not underlined if it's a link */
         }
 
         .logo:hover {
             transform: scale(1.02);
         }
-        
+
         .logo-icon {
             width: 2.2rem; 
             height: 2.2rem; 
             animation: pulse 2s infinite;
-            color: var(--primary-light);
+            /* Color will be inherited from SVG's stroke="currentColor" or fill="currentColor" */
         }
-
-
+        
         @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .logo-text {
@@ -154,36 +127,42 @@
 
         .tagline {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 1rem;
             background: rgba(255, 255, 255, 0.05);
             padding: 8px 15px;
             border-radius: 50px;
             border: 1px solid var(--glass-border);
         }
 
-        .random-anime-btn-header, .new-releases-btn-header, .logout-btn-header {
-            background: transparent;
+        .random-anime-btn-header, .new-releases-btn-header {
+            background: rgba(255,255,255,0.1);
             border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 8px 15px;
-            border-radius: 50px;
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: 10px;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
         }
 
-        .random-anime-btn-header:hover, .new-releases-btn-header:hover, .logout-btn-header:hover {
+        .random-anime-btn-header:hover, .new-releases-btn-header:hover {
             background: var(--primary-color);
-            color: var(--text-primary);
             border-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(225, 48, 108, 0.2);
         }
+        .random-anime-btn-header i, .new-releases-btn-header i {
+            font-size: 1rem; /* Slightly smaller icon */
+        }
 
+
+        /* Main container */
         .main-container {
             max-width: 1200px;
             width: 100%;
@@ -196,13 +175,13 @@
             padding: 40px;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            flex-grow: 1; /* Allows main container to take up available space */
         }
 
         .main-container:hover {
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
+        /* Download form */
         .download-form {
             display: flex;
             flex-direction: column;
@@ -273,24 +252,18 @@
             box-shadow: 0 7px 20px rgba(225, 48, 108, 0.4);
         }
 
-        .download-btn:hover::before {
-            left: 100%;
-        }
+        .download-btn:hover::before { left: 100%; }
+        .download-btn:active { transform: translateY(0); }
 
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
+        /* Results section */
         .results {
             margin-top: 40px;
-            display: none; /* Initially hidden */
+            display: none; /* Hidden by default */
         }
-
         .results.active {
             display: block;
             animation: fadeIn 0.5s ease;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -299,563 +272,362 @@
         .media-card {
             background: var(--light-bg);
             border-radius: 18px;
-            overflow: hidden;
+            overflow: hidden; /* Ensures content fits within rounded corners */
             display: flex;
-            flex-direction: column; /* Default for mobile */
-            align-items: center; /* Center items for column layout */
+            flex-direction: column; /* Default for smaller screens */
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
             transition: var(--transition);
-            padding: 20px; /* Adjusted padding */
-            text-align: center; /* Center text for column layout */
+            padding: 20px; /* Uniform padding */
+            gap: 20px; /* Space between elements */
         }
         
-        #mediaCardPlaceholder {
-            color: var(--text-secondary);
-            font-style: italic;
-            padding: 20px;
-            text-align: center;
+        @media (min-width: 768px) {
+            .media-card {
+                flex-direction: row; /* Side-by-side on larger screens */
+            }
         }
 
-        .media-snapshot-container {
-            width: 100%; /* Full width on mobile */
-            max-width: 150px; /* Max width for thumbnail on larger screens */
-            height: auto;
-            margin-bottom: 15px; /* Space below image on mobile */
-            flex-shrink: 0;
-        }
-        
         .media-snapshot {
-            width: 100%;
-            height: 225px; /* Fixed height for consistent thumbnail */
+            width: 150px;
+            height: 225px;
             object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid var(--glass-border);
-            background-color: var(--darker-bg); /* Background for letterboxing if object-fit: contain is used */
+            border-radius: 12px; /* Rounded corners for the image */
+            flex-shrink: 0; /* Prevent image from shrinking */
+            border: 1px solid var(--glass-border);
         }
 
         .media-info {
             display: flex;
             flex-direction: column;
-            gap: 10px; /* Reduced gap */
-            width: 100%; /* Full width on mobile */
-            align-items: center; /* Center info items for column layout */
+            gap: 15px; /* Space between title, episode, and links */
+            flex-grow: 1; /* Allow info to take remaining space */
         }
 
         .media-title {
-            font-size: 1.2rem; /* Adjusted size */
+            font-size: 1.4rem; /* Slightly larger title */
             font-weight: 600;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .media-episode {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-secondary);
-            background: rgba(255,255,255,0.05);
-            padding: 3px 8px;
-            border-radius: 5px;
-            display: inline-block;
-        }
-        
-        .download-options-container {
-            margin-top: 15px;
-            width: 100%;
+            font-style: italic;
         }
 
+        .download-options-container {
+            margin-top: 10px;
+        }
+        
         .download-links-section {
             margin-bottom: 15px;
         }
-
-        .links-header {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--accent-color);
-            font-size: 1rem;
-        }
         
+        .links-header {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
         .download-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Adjusted gap */
-            justify-content: center;
+            gap: 12px;
         }
 
-        .download-option {
+        .download-option, .download-option-button {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--glass-border);
             color: var(--text-primary);
-            padding: 10px 15px; /* Adjusted padding */
+            padding: 10px 18px; /* Adjusted padding */
             border-radius: 10px;
-            font-size: 0.9rem; /* Adjusted size */
+            font-size: 0.9rem; /* Adjusted font size */
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
+            display: inline-flex; /* For icon alignment */
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            text-align: center; /* Center text for buttons */
+        }
+        .download-option-button {
+             min-width: 150px; /* Ensure buttons have some minimum width */
         }
 
-        .download-option:hover {
+        .download-option:hover, .download-option-button:hover {
             background: var(--primary-color);
             border-color: var(--primary-color);
+            color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(225, 48, 108, 0.2);
         }
-
-        .download-option i {
-            font-size: 1rem; /* Adjusted size */
+        .download-option i, .download-option-button i { font-size: 1rem; }
+        .download-option-button .spinner-resolve {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin-resolve 0.8s linear infinite;
+            margin-right: 5px;
         }
-        
+        @keyframes spin-resolve { to { transform: rotate(360deg); } }
+
+        .resolved-links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px; /* Space above resolved links */
+        }
+
         .no-links {
             color: var(--text-secondary);
             font-style: italic;
-            font-size: 0.9rem;
         }
 
-        /* Loading state */
+        /* Loading state for main search */
+        .loading {
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Ensure loader and text are stacked */
+            padding: 40px 0; /* Add some padding */
+        }
+        .loading.active {
+            display: flex;
+        }
+
         .loader {
           --background: linear-gradient(135deg, #23C4F8, #275EFE);
           --shadow: rgba(39, 94, 254, 0.28);
-          --text: #6C7486;
+          --text: #6C7486; /* Color for "Loading" text under the book */
           --page: rgba(255, 255, 255, 0.36);
           --page-fold: rgba(255, 255, 255, 0.52);
           --duration: 3s;
           width: 200px;
           height: 140px;
           position: relative;
+          color: var(--text); /* Ensures the span "Loading" uses this color */
         }
-
         .loader:before, .loader:after {
-          --r: -6deg;
-          content: "";
-          position: absolute;
-          bottom: 8px;
-          width: 120px;
-          top: 80%;
-          box-shadow: 0 16px 12px var(--shadow);
-          transform: rotate(var(--r));
+          --r: -6deg; content: ""; position: absolute; bottom: 8px; width: 120px; top: 80%;
+          box-shadow: 0 16px 12px var(--shadow); transform: rotate(var(--r));
         }
-
-        .loader:before {
-          left: 4px;
-        }
-
-        .loader:after {
-          --r: 6deg;
-          right: 4px;
-        }
-
+        .loader:before { left: 4px; }
+        .loader:after { --r: 6deg; right: 4px; }
         .loader div {
-          width: 100%;
-          height: 100%;
-          border-radius: 13px;
-          position: relative;
-          z-index: 1;
-          perspective: 600px;
-          box-shadow: 0 4px 6px var(--shadow);
+          width: 100%; height: 100%; border-radius: 13px; position: relative; z-index: 1;
+          perspective: 600px; box-shadow: 0 4px 6px var(--shadow);
           background-image: var(--background);
         }
-
-        .loader div ul {
-          margin: 0;
-          padding: 0;
-          list-style: none;
-          position: relative;
-        }
-
+        .loader div ul { margin: 0; padding: 0; list-style: none; position: relative; }
         .loader div ul li {
-          --r: 180deg;
-          --o: 0;
-          --c: var(--page);
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          transform-origin: 100% 50%;
-          color: var(--c);
-          opacity: var(--o);
-          transform: rotateY(var(--r));
-          -webkit-animation: var(--duration) ease infinite;
+          --r: 180deg; --o: 0; --c: var(--page);
+          position: absolute; top: 10px; left: 10px; transform-origin: 100% 50%;
+          color: var(--c); opacity: var(--o); transform: rotateY(var(--r));
           animation: var(--duration) ease infinite;
         }
-
-        .loader div ul li:nth-child(2) {
-          --c: var(--page-fold);
-          -webkit-animation-name: page-2;
-          animation-name: page-2;
+        .loader div ul li:nth-child(2) { --c: var(--page-fold); animation-name: page-2; }
+        .loader div ul li:nth-child(3) { --c: var(--page-fold); animation-name: page-3; }
+        .loader div ul li:nth-child(4) { --c: var(--page-fold); animation-name: page-4; }
+        .loader div ul li:nth-child(5) { --c: var(--page-fold); animation-name: page-5; }
+        .loader div ul li svg, .loader div ul li img { width: 90px; height: 120px; display: block; } /* Applied to SVG or IMG */
+        .loader div ul li:first-child { --r: 0deg; --o: 1; }
+        .loader div ul li:last-child { --o: 1; }
+        .loader span { /* This targets the "Loading" text span */
+          display: block; left: 0; right: 0; top: 100%;
+          margin-top: 20px; text-align: center; color: inherit; /* Inherits from .loader's color */
+          font-size: 1.1rem;
         }
+        @keyframes page-2 { 0%{transform:rotateY(180deg);opacity:0}20%{opacity:1}35%,100%{opacity:0}50%,100%{transform:rotateY(0deg)} }
+        @keyframes page-3 { 15%{transform:rotateY(180deg);opacity:0}35%{opacity:1}50%,100%{opacity:0}65%,100%{transform:rotateY(0deg)} }
+        @keyframes page-4 { 30%{transform:rotateY(180deg);opacity:0}50%{opacity:1}65%,100%{opacity:0}80%,100%{transform:rotateY(0deg)} }
+        @keyframes page-5 { 45%{transform:rotateY(180deg);opacity:0}65%{opacity:1}80%,100%{opacity:0}95%,100%{transform:rotateY(0deg)} }
 
-        .loader div ul li:nth-child(3) {
-          --c: var(--page-fold);
-          -webkit-animation-name: page-3;
-          animation-name: page-3;
+        /* Error state */
+        .error-message-container {
+            display: none; /* Hidden by default */
+            margin-top: 25px;
         }
-
-        .loader div ul li:nth-child(4) {
-          --c: var(--page-fold);
-          -webkit-animation-name: page-4;
-          animation-name: page-4;
+        .error-message-container.active {
+            display: block;
         }
-
-        .loader div ul li:nth-child(5) {
-          --c: var(--page-fold);
-          -webkit-animation-name: page-5;
-          animation-name: page-5;
-        }
-
-        .loader div ul li svg {
-          width: 90px;
-          height: 120px;
-          display: block;
-        }
-
-        .loader div ul li:first-child {
-          --r: 0deg;
-          --o: 1;
-        }
-
-        .loader div ul li:last-child {
-          --o: 1;
-        }
-
-        .loading-text-custom { /* Renamed to avoid conflict with loader's span */
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            text-align: center;
-            margin-top: 10px;
-        }
-        
-        .loading {
-            display: none; /* Initially hidden */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .loading.active {
-            display: flex; /* Show when active */
-        }
-
-
-        @keyframes page-2 {
-          0% {
-            transform: rotateY(180deg);
-            opacity: 0;
-          }
-
-          20% {
-            opacity: 1;
-          }
-
-          35%, 100% {
-            opacity: 0;
-          }
-
-          50%, 100% {
-            transform: rotateY(0deg);
-          }
-        }
-
-        @keyframes page-3 {
-          15% {
-            transform: rotateY(180deg);
-            opacity: 0;
-          }
-
-          35% {
-            opacity: 1;
-          }
-
-          50%, 100% {
-            opacity: 0;
-          }
-
-          65%, 100% {
-            transform: rotateY(0deg);
-          }
-        }
-
-        @keyframes page-4 {
-          30% {
-            transform: rotateY(180deg);
-            opacity: 0;
-          }
-
-          50% {
-            opacity: 1;
-          }
-
-          65%, 100% {
-            opacity: 0;
-          }
-
-          80%, 100% {
-            transform: rotateY(0deg);
-          }
-        }
-
-        @keyframes page-5 {
-          45% {
-            transform: rotateY(180deg);
-            opacity: 0;
-          }
-
-          65% {
-            opacity: 1;
-          }
-
-          80%, 100% {
-            opacity: 0;
-          }
-
-          95%, 100% {
-            transform: rotateY(0deg);
-          }
-        }
-        
         .error-message {
-            display: none;
             background: rgba(225, 48, 108, 0.1);
             border: 1px solid var(--primary-color);
             color: var(--text-primary);
             padding: 18px;
             border-radius: 15px;
-            margin-top: 25px;
             text-align: center;
             animation: shake 0.5s ease;
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
+        .error-icon { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
 
-        .error-message.active {
-            display: block;
-            animation: fadeIn 0.5s ease, shake 0.5s ease;
+        /* Anime Suggestions Section */
+        #animeSuggestionsSection {
+            margin-top: 50px;
         }
-
-        .error-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
         }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -8px; left: 0;
+            width: 50px; height: 3px; background: var(--primary-color); border-radius: 3px;
+        }
+        #suggestionsGrid {
+            display: flex;
+            overflow-x: auto; /* Horizontal scroll */
+            gap: 15px;
+            padding: 10px 0; /* Padding for scrollbar visibility */
+            white-space: nowrap; /* Prevent wrapping to keep in single line */
+        }
+        .suggestion-card {
+            background: var(--light-bg);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: inline-flex; /* Use inline-flex for consistent behavior in a flex row */
+            flex-direction: column; /* Stack image and name vertically */
+            width: 180px; /* Fixed width for cards */
+            flex-shrink: 0; /* Prevent cards from shrinking */
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .suggestion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border-color: var(--primary-color);
+        }
+        .suggestion-card img {
+            width: 100%;
+            height: 250px; /* Taller images for suggestions */
+            object-fit: cover;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .suggestion-card .suggestion-name {
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            white-space: normal; /* Allow text to wrap */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Limit to 2 lines */
+            -webkit-box-orient: vertical;
+            min-height: 40px; /* Fixed height for name area */
+        }
+        #suggestionsLoaderContainer { margin-top: 20px; }
 
+
+        /* Features section */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin-top: 50px;
         }
-
         .feature-card {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 18px;
-            transition: var(--transition);
+            background: var(--light-bg); border-radius: 15px; padding: 25px;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; gap: 18px; transition: var(--transition);
             border: 1px solid transparent;
         }
-
         .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             border-color: var(--glass-border);
         }
-
         .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
+            font-size: 2.5rem; color: var(--primary-color);
             background: rgba(225, 48, 108, 0.1);
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
+            width: 80px; height: 80px; display: flex; align-items: center;
+            justify-content: center; border-radius: 50%;
         }
+        .feature-title { font-size: 1.2rem; font-weight: 600; }
+        .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
 
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .feature-desc {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .faq {
-            margin-top: 60px;
-        }
-
-        .faq-item {
-            margin-bottom: 15px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--light-bg);
-        }
-
+        /* FAQ section */
+        .faq { margin-top: 60px; }
+        .faq-item { margin-bottom: 15px; border-radius: 12px; overflow: hidden; background: var(--light-bg); }
         .faq-question {
-            padding: 18px 25px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
+            padding: 18px 25px; background: rgba(255,255,255,0.05); color: var(--text-primary);
+            font-weight: 500; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; transition: var(--transition);
         }
-
-        .faq-question:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 1.3rem;
-            transition: var(--transition);
-        }
-
-        .faq-question.active::after {
-            content: '-';
-        }
-
+        .faq-question:hover { background: rgba(255,255,255,0.08); }
+        .faq-question::after { content: '+'; font-size: 1.3rem; transition: var(--transition); }
+        .faq-question.active::after { content: '-'; }
         .faq-answer {
-            padding: 0 25px;
-            max-height: 0;
-            overflow: hidden;
+            padding: 0 25px; max-height: 0; overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;
         }
+        .faq-question.active + .faq-answer { padding: 18px 25px; max-height: 500px; }
 
-        .faq-question.active + .faq-answer {
-            padding: 18px 25px;
-            max-height: 500px;
-        }
-
+        /* Footer */
         .footer {
-            margin-top: auto; /* Pushes footer to the bottom */
-            padding: 30px 0 20px; /* Adjusted padding */
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            position: relative;
+            margin-top: 80px; text-align: center; color: var(--text-secondary);
+            font-size: 0.95rem; padding: 30px 0; position: relative;
         }
-
         .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 2px;
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 200px; height: 2px;
             background: linear-gradient(to right, transparent, var(--glass-border), transparent);
         }
-
-        .creator {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .creator:hover {
-            text-decoration: underline;
-            color: var(--primary-color);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
+        .creator { color: var(--accent-color); text-decoration: none; transition: var(--transition); font-weight: 500; }
+        .creator:hover { text-decoration: underline; color: var(--primary-color); }
+        .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
         .social-link {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            transition: var(--transition);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary); font-size: 1.2rem; transition: var(--transition);
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; background: rgba(255,255,255,0.05);
         }
-
         .social-link:hover {
-            color: var(--primary-color);
-            background: rgba(225, 48, 108, 0.1);
+            color: var(--primary-color); background: rgba(225, 48, 108, 0.1);
             transform: translateY(-3px);
         }
 
-        @media (min-width: 768px) {
-            .media-card {
-                flex-direction: row; /* Side-by-side on larger screens */
-                text-align: left; /* Align text to left for row layout */
-                align-items: flex-start; /* Align items to top for row layout */
-                gap: 20px;
-            }
-            .media-snapshot-container {
-                width: 150px; /* Fixed width for thumbnail on larger screens */
-                margin-bottom: 0; /* No margin bottom when side-by-side */
-            }
-            .media-info {
-                align-items: flex-start; /* Align info to left for row layout */
-            }
-            .download-options {
-                justify-content: flex-start;
-            }
-        }
-
+        /* Responsive adjustments */
         @media (max-width: 992px) {
-            .main-container {
-                padding: 30px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-            
-            .logo {
-                justify-content: center;
-            }
-            .header-actions {
-                justify-content: center;
-            }
+            .main-container { padding: 30px; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .logo { justify-content: center; }
+            .header-actions { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .main-container { padding: 25px; }
+            .logo-text { font-size: 1.5rem; }
+            .download-btn { padding: 16px 25px; font-size: 1rem; }
+            .media-title { font-size: 1.2rem; }
+            .url-input { font-size: 1rem; padding: 16px 20px; }
+            .download-option, .download-option-button { font-size: 0.85rem; padding: 10px 15px; }
+            .section-title { font-size: 1.3rem; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .main-container { padding: 20px; }
+            .logo-text { font-size: 1.3rem; }
+            .tagline { font-size: 0.9rem; }
+            .random-anime-btn-header, .new-releases-btn-header { font-size: 0.9rem; padding: 8px 15px; }
+            .url-input { padding: 15px; }
+            .download-btn { padding: 15px; }
+            .media-snapshot { width: 120px; height: 180px; }
         }
 
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 25px;
-            }
-            
-            .logo-text {
-                font-size: 1.5rem;
-            }
-            
-            .download-btn {
-                padding: 16px 25px;
-            }
-            
-            .media-title {
-                font-size: 1.1rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -864,6 +636,7 @@
             window.location.href = '/login.html';
         }
     </script>
+
     <div class="bg-animation">
         <div class="bg-circle circle-1"></div>
         <div class="bg-circle circle-2"></div>
@@ -871,26 +644,25 @@
     </div>
 
     <header class="header">
-        <a href="/anime.html" class="logo">
+        <a href="/anime" class="logo">
             <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
             <span class="logo-text">Aniplix</span>
         </a>
         <div class="header-actions">
-            <span class="tagline">Your Anime, Your Way.</span>
+            <span class="tagline">Your Anime Universe</span>
             <a href="/random" class="random-anime-btn-header">
                 <i class="fas fa-random"></i> Random Anime
             </a>
             <a href="/new" class="new-releases-btn-header">
                 <i class="fas fa-fire"></i> New Releases
             </a>
-            
         </div>
     </header>
 
-    <div class="main-container">
-        <form class="download-form" id="animeForm">
+    <main class="main-container">
+        <form id="animeForm" class="download-form">
             <div class="input-group">
-                <input type="text" id="animename" class="url-input" placeholder="e.g., Solo Leveling or Naruto epi 10 (episode defaults to 1 if not specified)" required>
+                <input type="text" id="animename" class="url-input" placeholder="SEARCH FOR ANIME" required>
             </div>
             <button type="submit" class="download-btn">
                 <i class="fas fa-search"></i> Search Anime
@@ -900,86 +672,104 @@
         <div class="loading" id="loadingState">
             <div class="loader">
                 <div>
-                  <ul>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                    <li>
-                      <svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg>
-                    </li>
-                  </ul>
+                    <ul>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                    </ul>
+                </div>
+                <span>Loading</span>
+            </div>
+        </div>
+        
+        <div id="resultsContainer" class="results">
+            <div class="media-card" id="mediaCard">
+                 <!-- Results will be injected here -->
+                 <p id="mediaCardPlaceholder" style="text-align: center; color: var(--text-secondary);">Search for an anime to see results.</p>
+            </div>
+        </div>
+
+        <div id="errorMessageDiv" class="error-message-container">
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle error-icon"></i>
+                <p id="errorText">An error occurred.</p>
+            </div>
+        </div>
+
+        <section id="animeSuggestionsSection">
+            <h2 class="section-title">Popular Suggestions</h2>
+            <div id="suggestionsLoaderContainer" class="loading">
+                 <div class="loader"> <!-- Re-using main loader style -->
+                    <div>
+                        <ul>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                            <li><svg fill="currentColor" viewBox="0 0 90 120"><path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path></svg></li>
+                        </ul>
+                    </div>
+                    <span>Loading Suggestions...</span>
                 </div>
             </div>
-            <p class="loading-text-custom">Loading Anime...</p>
-        </div>
-
-        <div class="error-message" id="errorMessage">
-            <i class="fas fa-exclamation-triangle error-icon"></i>
-            <p id="errorText">Something went wrong.</p>
-        </div>
-
-        <div class="results" id="resultsContainer">
-            <div class="media-card" id="mediaCard">
-                <p id="mediaCardPlaceholder">Search for an anime to see details here.</p>
-                <!-- Results will be injected here by JavaScript -->
+            <div id="suggestionsGrid">
+                <!-- Suggestions will be injected here -->
             </div>
-        </div>
+            <div id="suggestionsErrorMessageDiv" class="error-message-container">
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <p id="suggestionsErrorText">Could not load suggestions.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="features">
+        <section class="features">
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                <h3 class="feature-title">Fast Downloads</h3>
-                <p class="feature-desc">Get your anime episodes quickly with our optimized download links.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-search"></i></div>
-                <h3 class="feature-title">Easy Search</h3>
-                <p class="feature-desc">Find any anime and episode with our simple and powerful search.</p>
+                <h3 class="feature-title">Lightning Fast</h3>
+                <p class="feature-desc">Get your anime links quickly and efficiently. Our optimized search ensures you spend less time waiting.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-film"></i></div>
-                <h3 class="feature-title">Wide Selection</h3>
-                <p class="feature-desc">Access a vast library of anime series and movies.</p>
+                <h3 class="feature-title">Vast Library</h3>
+                <p class="feature-desc">Access a wide range of anime series and episodes. Your next binge-watch is just a search away.</p>
             </div>
-        </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+                <h3 class="feature-title">Easy to Use</h3>
+                <p class="feature-desc">A clean, intuitive interface designed for all anime fans, making your search experience seamless.</p>
+            </div>
+        </section>
 
-        <div class="faq">
+        <section class="faq">
             <h2 class="section-title">Frequently Asked Questions</h2>
             <div class="faq-item">
-                <div class="faq-question">Is Aniplix free to use?</div>
+                <div class="faq-question">How do I search for an anime?</div>
                 <div class="faq-answer">
-                    <p>Yes, Aniplix is completely free to use for searching and finding anime download links.</p>
+                    <p>Simply type the anime name and optionally the episode number (e.g., "Naruto 1" or "One Piece epi 50") into the search bar and click "Search Anime". If no episode is specified, it defaults to episode 1.</p>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">How are the download links sourced?</div>
+                <div class="faq-question">What if I get a "No links found" message?</div>
                 <div class="faq-answer">
-                    <p>Aniplix utilizes a public API to fetch anime information and download links. We do not host any content ourselves.</p>
+                    <p>This means the API couldn't find the specific anime or episode you searched for. Try checking your spelling, or the anime might not be available. You can also try searching for a different episode.</p>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">What if I can't find an anime?</div>
+                <div class="faq-question">Are the download links direct?</div>
                 <div class="faq-answer">
-                    <p>Our database is regularly updated. If an anime is not found, it might not be available through our current API provider or might be a very new release.</p>
+                    <p>For links labeled with "Download", you'll first click a "Resolve" button. This fetches more direct Kwik or MP4 download links. Other links might be direct streaming links.</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://github.com/lakshay-art" target="_blank" class="creator">BLUE DEMON</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created with <i class="fas fa-heart" style="color: var(--primary-color);"></i> by <a href="https://wa.me/2347041039367" target="_blank" class="creator">BLUE DEMON</a>.</p>
         <div class="social-links">
             <a href="#" class="social-link"><i class="fab fa-github"></i></a>
             <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -994,206 +784,263 @@
             const mediaCard = document.getElementById('mediaCard');
             const mediaCardPlaceholder = document.getElementById('mediaCardPlaceholder');
             const loadingState = document.getElementById('loadingState');
-            const errorMessage = document.getElementById('errorMessage');
+            const errorMessageDiv = document.getElementById('errorMessageDiv');
             const errorText = document.getElementById('errorText');
 
-            animeForm.addEventListener('submit', searchAnime);
+            const suggestionsLoaderContainer = document.getElementById('suggestionsLoaderContainer');
+            const suggestionsGrid = document.getElementById('suggestionsGrid');
+            const suggestionsErrorMessageDiv = document.getElementById('suggestionsErrorMessageDiv');
+            const suggestionsErrorText = document.getElementById('suggestionsErrorText');
 
-            function searchAnime(event) {
+
+            animeForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                const animenameInput = document.getElementById('animename').value.trim();
+                const animeInput = document.getElementById('animename').value.trim();
                 
                 resultsContainer.classList.remove('active');
-                mediaCard.innerHTML = ''; // Clear previous results
-                mediaCard.appendChild(mediaCardPlaceholder); // Reset placeholder
-                mediaCardPlaceholder.textContent = 'Search for an anime to see details here.';
-                errorMessage.classList.remove('active');
+                errorMessageDiv.classList.remove('active');
                 loadingState.classList.add('active');
+                if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'none';
 
-                if (!animenameInput) {
-                    showError('Please enter an anime name.');
+
+                if (!animeInput) {
+                    showError("Please enter an anime name.");
                     loadingState.classList.remove('active');
+                    if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
                     return;
                 }
-                
-                let animeQuery = animenameInput;
-                let episodeQuery = "1"; // Default to episode 1
 
-                const episodeMatch = animenameInput.match(/^(.*?)(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
+                let animeName = '';
+                let episodeNumber = '1'; // Default to episode 1
 
-                if (episodeMatch) {
-                    animeQuery = episodeMatch[1].trim();
-                    episodeQuery = episodeMatch[2];
+                const match = animeInput.match(/^(.*?)(?:\s+e[ps]?i?(?:sode)?)?\s+(\d+)$/i);
+
+                if (match) {
+                    animeName = match[1].trim();
+                    episodeNumber = match[2];
                 } else {
-                    // If no episode specified, use the whole input as anime name and default episode to 1
-                    animeQuery = animenameInput; 
+                    animeName = animeInput; // Entire input is anime name, episode defaults to 1
                 }
 
-                if (!animeQuery) {
-                    showError('Anime name cannot be empty after parsing.');
+                if (!animeName) {
+                    showError("Invalid input. Please enter an anime name.");
                     loadingState.classList.remove('active');
+                     if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
                     return;
                 }
-                if (parseInt(episodeQuery) <= 0) {
-                    showError('Episode number must be a positive integer.');
+                 const episodeNum = parseInt(episodeNumber, 10);
+                if (isNaN(episodeNum) || episodeNum <= 0) {
+                    showError("Invalid episode number. Please enter a positive number or leave blank for episode 1.");
                     loadingState.classList.remove('active');
+                    if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
                     return;
                 }
 
 
-                fetch(`/api/search-anime?animename=${encodeURIComponent(animeQuery)}&episode=${encodeURIComponent(episodeQuery)}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(err => { throw new Error(err.message || `HTTP error! Status: ${response.status}`)});
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        loadingState.classList.remove('active');
-                        if (data.error || (data.detail && !data.title)) { // Check for API specific error details
-                            showError(data.error || data.detail || 'Anime not found or no links available.');
-                        } else if (!data.title) {
-                            showError('Anime not found or critical data missing.');
-                        }
-                         else {
-                            displayResults(data);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        loadingState.classList.remove('active');
-                        showError(error.message || 'Failed to fetch anime details. Please try again.');
-                    });
-            }
+                try {
+                    const response = await fetch(`/api/search-anime?animename=${encodeURIComponent(animeName)}&episode=${encodeURIComponent(episodeNumber)}`);
+                    const data = await response.json();
+
+                    loadingState.classList.remove('active');
+
+                    if (!response.ok || data.message) {
+                        showError(data.message || `Error: ${response.status}`);
+                        return;
+                    }
+                    displayResults(data);
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    showError('Failed to fetch anime data. Check your network or try again.');
+                    loadingState.classList.remove('active');
+                }
+            });
 
             function displayResults(data) {
-                mediaCard.innerHTML = ''; // Clear placeholder or previous results
-                resultsContainer.classList.add('active');
+                mediaCard.innerHTML = ''; // Clear previous results or placeholder
 
-                const snapshotContainer = document.createElement('div');
-                snapshotContainer.className = 'media-snapshot-container';
-                
                 const snapshotImg = document.createElement('img');
                 snapshotImg.className = 'media-snapshot';
+                console.log("Attempting to load snapshot:", data.snapshot);
+                snapshotImg.src = data.snapshot ? `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}` : 'https://placehold.co/150x225.png';
                 snapshotImg.alt = data.title || 'Anime Snapshot';
                 snapshotImg.setAttribute('data-ai-hint', 'anime art');
-                
-                if (data.snapshot) {
-                    snapshotImg.src = `/api/image-proxy?url=${encodeURIComponent(data.snapshot)}`;
-                    snapshotImg.onerror = () => {
-                        console.error('Snapshot failed to load, using placeholder.');
-                        snapshotImg.src = 'https://placehold.co/150x225.png';
-                    };
-                } else {
-                    snapshotImg.src = 'https://placehold.co/150x225.png';
-                }
-                snapshotContainer.appendChild(snapshotImg);
+                snapshotImg.setAttribute('referrerpolicy', 'no-referrer');
+                snapshotImg.onerror = function() {
+                    console.error("Failed to load snapshot:", this.src);
+                    this.onerror = null; 
+                    this.src = 'https://placehold.co/150x225.png';
+                };
+                mediaCard.appendChild(snapshotImg);
 
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'media-info';
+                const mediaInfoDiv = document.createElement('div');
+                mediaInfoDiv.className = 'media-info';
 
                 const titleElement = document.createElement('h3');
                 titleElement.className = 'media-title';
-                titleElement.textContent = data.title || 'N/A';
-                infoDiv.appendChild(titleElement);
+                titleElement.textContent = data.title || 'Title Not Available';
+                mediaInfoDiv.appendChild(titleElement);
 
-                if (data.episode) {
-                    const episodeElement = document.createElement('p');
-                    episodeElement.className = 'media-episode';
-                    episodeElement.innerHTML = `<i class="fas fa-tv"></i> Episode: ${data.episode}`;
-                    infoDiv.appendChild(episodeElement);
-                }
+                const episodeElement = document.createElement('p');
+                episodeElement.className = 'media-episode';
+                episodeElement.textContent = `Episode: ${data.episode || 'N/A'}`;
+                mediaInfoDiv.appendChild(episodeElement);
                 
                 const downloadOptionsContainer = document.createElement('div');
                 downloadOptionsContainer.className = 'download-options-container';
 
                 if (data.links) {
-                    if (data.links.sub && Object.keys(data.links.sub).length > 0) {
-                        const subSection = createLinksSection('Subtitled <i class="fas fa-closed-captioning"></i>', data.links.sub);
-                        downloadOptionsContainer.appendChild(subSection);
-                    }
-                    if (data.links.dub && Object.keys(data.links.dub).length > 0) {
-                        const dubSection = createLinksSection('Dubbed <i class="fas fa-microphone-alt"></i>', data.links.dub);
-                        downloadOptionsContainer.appendChild(dubSection);
-                    }
-                     if (Object.keys(data.links.sub || {}).length === 0 && Object.keys(data.links.dub || {}).length === 0) {
-                        const noLinksMessage = document.createElement('p');
-                        noLinksMessage.className = 'no-links';
-                        noLinksMessage.textContent = 'No download links available for this episode.';
-                        downloadOptionsContainer.appendChild(noLinksMessage);
+                    const linkTypes = { sub: "Subtitled Links", dub: "Dubbed Links" };
+                    for (const type in linkTypes) {
+                        if (data.links[type] && Object.keys(data.links[type]).length > 0) {
+                            const sectionDiv = document.createElement('div');
+                            sectionDiv.className = 'download-links-section';
+                            
+                            const header = document.createElement('h4');
+                            header.className = 'links-header';
+                            header.textContent = linkTypes[type];
+                            sectionDiv.appendChild(header);
+
+                            const optionsDiv = document.createElement('div');
+                            optionsDiv.className = 'download-options';
+
+                            for (const quality in data.links[type]) {
+                                const link = data.links[type][quality];
+                                if (quality.endsWith('_download')) {
+                                    const button = document.createElement('button');
+                                    button.className = 'download-option-button';
+                                    button.textContent = `Resolve ${quality.replace('_download', '')}`;
+                                    button.dataset.paheUrl = link;
+                                    
+                                    button.addEventListener('click', async function() {
+                                        this.innerHTML = '<span class="spinner-resolve"></span> Resolving...';
+                                        this.disabled = true;
+                                        try {
+                                            const resolveResponse = await fetch(`/api/resolve-download-link?url=${encodeURIComponent(this.dataset.paheUrl)}`);
+                                            const resolvedData = await resolveResponse.json();
+                                            
+                                            const parent = this.parentElement;
+                                            parent.removeChild(this); // Remove the resolve button
+
+                                            if (resolveResponse.ok && (resolvedData.mp4Link || resolvedData.kwikLink)) {
+                                                const resolvedLinksContainer = document.createElement('div');
+                                                resolvedLinksContainer.className = 'resolved-links-container';
+
+                                                if(resolvedData.mp4Link) {
+                                                    const mp4A = document.createElement('a');
+                                                    mp4A.href = resolvedData.mp4Link;
+                                                    mp4A.textContent = `MP4 (${quality.replace('_download', '')})`;
+                                                    mp4A.className = 'download-option';
+                                                    mp4A.target = '_blank';
+                                                    resolvedLinksContainer.appendChild(mp4A);
+                                                }
+                                                if(resolvedData.kwikLink) {
+                                                    const kwikA = document.createElement('a');
+                                                    kwikA.href = resolvedData.kwikLink;
+                                                    kwikA.textContent = `Kwik (${quality.replace('_download', '')})`;
+                                                    kwikA.className = 'download-option';
+                                                    kwikA.target = '_blank';
+                                                    resolvedLinksContainer.appendChild(kwikA);
+                                                }
+                                                parent.appendChild(resolvedLinksContainer);
+
+                                            } else {
+                                                const errorP = document.createElement('p');
+                                                errorP.className = 'no-links';
+                                                errorP.textContent = resolvedData.message || `Could not resolve ${quality.replace('_download', '')}.`;
+                                                parent.appendChild(errorP);
+                                            }
+                                        } catch (err) {
+                                            const errorP = document.createElement('p');
+                                            errorP.className = 'no-links';
+                                            errorP.textContent = `Error resolving ${quality.replace('_download', '')}. Try again.`;
+                                            parent.appendChild(errorP);
+                                        }
+                                    });
+                                    optionsDiv.appendChild(button);
+
+                                } else { // Direct Kwik stream links
+                                    const linkElement = document.createElement('a');
+                                    linkElement.href = link;
+                                    linkElement.className = 'download-option';
+                                    linkElement.textContent = `Stream ${quality}`;
+                                    linkElement.target = '_blank';
+                                    optionsDiv.appendChild(linkElement);
+                                }
+                            }
+                            sectionDiv.appendChild(optionsDiv);
+                            downloadOptionsContainer.appendChild(sectionDiv);
+                        }
                     }
                 } else {
-                    const noLinksMessage = document.createElement('p');
-                    noLinksMessage.className = 'no-links';
-                    noLinksMessage.textContent = 'No download links available.';
-                    downloadOptionsContainer.appendChild(noLinksMessage);
+                    const noLinksElement = document.createElement('p');
+                    noLinksElement.className = 'no-links';
+                    noLinksElement.textContent = 'No download/streaming links found.';
+                    downloadOptionsContainer.appendChild(noLinksElement);
                 }
-                infoDiv.appendChild(downloadOptionsContainer);
-                
-                mediaCard.appendChild(snapshotContainer);
-                mediaCard.appendChild(infoDiv);
+                mediaInfoDiv.appendChild(downloadOptionsContainer);
+                mediaCard.appendChild(mediaInfoDiv);
+                resultsContainer.classList.add('active');
             }
-            
-            function createLinksSection(headerText, linksObject) {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'download-links-section';
-
-                const headerElement = document.createElement('h4');
-                headerElement.className = 'links-header';
-                headerElement.innerHTML = headerText;
-                sectionDiv.appendChild(headerElement);
-
-                const optionsDiv = document.createElement('div');
-                optionsDiv.className = 'download-options';
-
-                let hasLinks = false;
-                for (const quality in linksObject) {
-                    if (linksObject[quality]) {
-                        hasLinks = true;
-                        const link = document.createElement('a');
-                        link.href = linksObject[quality];
-                        link.target = '_blank';
-                        link.className = 'download-option';
-                        link.innerHTML = `<i class="fas fa-download"></i> ${quality.replace('_download', '')}`;
-                        optionsDiv.appendChild(link);
-                    }
-                }
-                
-                if (!hasLinks) {
-                    const noLinksMessage = document.createElement('p');
-                    noLinksMessage.className = 'no-links';
-                    noLinksMessage.textContent = 'No links available for this type.';
-                    optionsDiv.appendChild(noLinksMessage);
-                }
-                sectionDiv.appendChild(optionsDiv);
-                return sectionDiv;
-            }
-
 
             function showError(message) {
                 errorText.textContent = message;
-                errorMessage.classList.add('active');
-                resultsContainer.classList.remove('active'); 
+                errorMessageDiv.classList.add('active');
+                loadingState.classList.remove('active');
+                resultsContainer.classList.remove('active');
+                 if(mediaCardPlaceholder) mediaCardPlaceholder.style.display = 'block';
             }
 
             // FAQ Accordion
-            const faqQuestions = document.querySelectorAll('.faq-question');
-            faqQuestions.forEach(question => {
+            document.querySelectorAll('.faq-question').forEach(question => {
                 question.addEventListener('click', () => {
                     question.classList.toggle('active');
-                    const answer = question.nextElementSibling;
-                    if (question.classList.contains('active')) {
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                        answer.style.padding = '18px 25px';
-                    } else {
-                        answer.style.maxHeight = '0';
-                        answer.style.padding = '0 25px';
-                    }
                 });
             });
 
-            // Footer Year
+            // Set current year in footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Fetch and display suggestions
+            async function fetchAndDisplaySuggestions() {
+                suggestionsLoaderContainer.classList.add('active');
+                suggestionsErrorMessageDiv.classList.remove('active');
+                suggestionsGrid.innerHTML = ''; // Clear previous suggestions
+
+                try {
+                    const response = await fetch('/api/anime-suggestions');
+                    const suggestions = await response.json();
+                    suggestionsLoaderContainer.classList.remove('active');
+
+                    if (!response.ok || (suggestions && suggestions.message)) {
+                        suggestionsErrorText.textContent = suggestions.message || 'Could not load suggestions.';
+                        suggestionsErrorMessageDiv.classList.add('active');
+                        return;
+                    }
+
+                    if (suggestions && suggestions.length > 0) {
+                        suggestions.forEach(anime => {
+                            const card = document.createElement('a');
+                            card.href = `/new-detail.html?url=${encodeURIComponent(anime.link)}`;
+                            card.className = 'suggestion-card';
+                            card.innerHTML = `
+                                <img src="/api/image-proxy?url=${encodeURIComponent(anime.image)}" alt="${anime.englishName || anime.japaneseName}" onerror="this.onerror=null;this.src='https://placehold.co/180x250.png';this.setAttribute('data-ai-hint', 'anime poster');">
+                                <div class="suggestion-name">${anime.englishName || anime.japaneseName}</div>
+                            `;
+                            suggestionsGrid.appendChild(card);
+                        });
+                    } else {
+                        suggestionsErrorText.textContent = 'No suggestions available at the moment.';
+                        suggestionsErrorMessageDiv.classList.add('active');
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                    suggestionsLoaderContainer.classList.remove('active');
+                    suggestionsErrorText.textContent = 'Failed to load suggestions. Please try again later.';
+                    suggestionsErrorMessageDiv.classList.add('active');
+                }
+            }
+            fetchAndDisplaySuggestions();
         });
     </script>
 </body>

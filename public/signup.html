@@ -122,11 +122,11 @@
             </div>
             <button type="submit" class="auth-btn">Sign Up</button>
         </form>
-        <p class="auth-link">Already have an account? <a href="/login.html">Login</a></p>
+        <p class="auth-link">Already have an account? <a href="/login">Login</a></p>
     </div>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://github.com/lakshay-art" target="_blank" class="creator">BLUE DEMON</a>.</p>
+        <p>&copy; <span id="currentYear"></span> Aniplix. Created by <a href="https://wa.me/2347041039367" target="_blank" class="creator">BLUE DEMON</a>.</p>
     </footer>
 
     <script>
@@ -168,7 +168,7 @@
                         showMessage(data.message, 'success');
                         signupForm.reset(); // Clear form on success
                          setTimeout(() => {
-                            window.location.href = '/login.html';
+                            window.location.href = '/login';
                         }, 1500);
                     } else {
                         showMessage(data.message || 'Signup failed. Please try again.', 'error');
