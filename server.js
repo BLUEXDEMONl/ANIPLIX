@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 7860;
 
 const DB_DIR = path.join(__dirname, 'database');
 const DB_PATH = path.join(DB_DIR, 'db.json');
