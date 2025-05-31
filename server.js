@@ -72,6 +72,10 @@ app.get('/stream-dwl', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'stream-dwl.html'));
 });
 
+app.get('/check-stats', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'stats.html'));
+});
+
 app.post('/api/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -142,6 +146,32 @@ app.post('/api/login', (req, res) => {
         } catch (compareError) {
             console.error('Error comparing password:', compareError);
             return res.status(500).json({ message: 'Server error during login (compare)' });
+        }
+    });
+});
+
+app.get('/api/stats', async (req, res) => {
+    // In a real application, this endpoint should be secured.
+    fs.readFile(DB_PATH, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading db.json for stats:', err);
+            return res.status(500).json({ message: 'Server error reading user data' });
+        }
+        try {
+            const db = JSON.parse(data);
+            const totalUsers = db.users.length;
+            
+            // If user objects had a registrationDate, more stats could be generated:
+            // const today = new Date().toISOString().split('T')[0];
+            // const usersRegisteredToday = db.users.filter(user => user.registrationDate && user.registrationDate.startsWith(today)).length;
+            
+            res.status(200).json({
+                totalUsers,
+                // usersRegisteredToday // example
+            });
+        } catch (parseError) {
+            console.error('Error parsing db.json for stats:', parseError);
+            return res.status(500).json({ message: 'Server error parsing user data' });
         }
     });
 });
@@ -478,7 +508,7 @@ app.get('/api/anime-suggestions', async (req, res) => {
 
             const japaneseName = $(el).find('.charttitlejp').text().trim() || 'N/A'; // Japanese name fallback
             
-            const href = $(el).find('.chartimg a').attr('href');
+            const href = $(el).find('.chartimg a').attr('href'); // Path like 'anime.php?hunter-x-hunter-2011'
             let animeLink = '#'; // Default link
             if (href) {
                 animeLink = `https://animeheaven.me/${href.startsWith('/') ? href.substring(1) : href}`;
@@ -487,8 +517,8 @@ app.get('/api/anime-suggestions', async (req, res) => {
             if (englishName !== 'Name not available' && animeLink !== '#') { // Only add if we have a name and a link
                  allPopularAnime.push({
                     image: imageUrl,
-                    englishName: englishName,
-                    japaneseName: japaneseName,
+                    englishName: englishName, // Use English name
+                    japaneseName: japaneseName, // Keep Japanese name for potential future use or display
                     link: animeLink
                 });
             }
@@ -502,7 +532,7 @@ app.get('/api/anime-suggestions', async (req, res) => {
         // Shuffle the array and pick the first 4
         const selectedSuggestions = [];
         const shuffled = allPopularAnime.sort(() => 0.5 - Math.random()); // Simple shuffle
-        selectedSuggestions.push(...shuffled.slice(0, Math.min(8, shuffled.length))); // Take up to 8
+        selectedSuggestions.push(...shuffled.slice(0, Math.min(4, shuffled.length))); // Take up to 4
         
         cachedSuggestions = selectedSuggestions;
         suggestionsCacheTimestamp = now;
@@ -544,7 +574,7 @@ app.get('/api/resolve-download-link', async (req, res) => {
             });
         } else {
             console.warn(`Failed to resolve or no links found for ${paheWinUrl}. API Response:`, apiResponse.data);
-    
+            // It's possible the resolver returns 200 OK but with an error message or no links
             res.status(404).json({ message: 'Could not resolve download links or no links found.' });
         }
     } catch (error) {
@@ -570,11 +600,14 @@ app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
+// General error handler - must be the last app.use()
 app.use((err, req, res, next) => {
-    console.error("Unhandled error:", err);
-    if (req.originalUrl.startsWith('/api/')) {
+    console.error("Unhandled error:", err); // Log the full error for server-side debugging
+    if (req.originalUrl.startsWith('/api/')) { // Check if the request was for an API endpoint
         res.status(500).json({ message: 'Internal Server Error. Please try again later.' });
     } else {
+        // For non-API requests, you might want to send a generic HTML error page
+        // For now, sending simple text/HTML
         res.status(500).send('<h1>Internal Server Error</h1><p>Sorry, something went wrong. Please try again later.</p>');
     }
 });
@@ -586,5 +619,3 @@ initializeDatabase().then(() => {
 }).catch(err => {
     console.error("Failed to initialize database and start server:", err);
 });
-
-    
