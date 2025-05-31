@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniplix - User Statistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #1a1a2e; /* Dark blue-purple */
+            --secondary-bg: #16213e; /* Slightly lighter dark blue */
+            --accent-color: #e94560; /* Vibrant pink/red */
+            --text-color: #e0e0e0; /* Light grey/white */
+            --card-bg: rgba(255, 255, 255, 0.05); /* Glassmorphism card bg */
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --loader-page-color: #f0f0f0; /* Lighter page for contrast */
+            --loader-page-bg: var(--accent-color); /* Accent color for page background */
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--primary-bg), var(--secondary-bg), #0f3460, var(--accent-color));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: rgba(0,0,0,0.2); /* Slight transparency */
+            backdrop-filter: blur(5px); /* Frosted glass effect */
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .logo-icon {
+            width: 30px; /* Adjust size as needed */
+            height: 30px;
+            margin-right: 10px;
+        }
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--accent-color); /* Use accent color for logo text */
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .header-action-secondary-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .header-action-secondary-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-bg); /* Or a light color if primary-bg is too dark */
+            border-color: var(--accent-color);
+        }
+        .main-container {
+            flex-grow: 1;
+            padding: 25px; /* Increased padding */
+            max-width: 900px;
+            margin: 30px auto; /* Increased top/bottom margin */
+            background-color: var(--card-bg);
+            border-radius: 12px; /* Slightly more rounded corners */
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px); /* Stronger blur for card */
+            border: 1px solid var(--border-color);
+        }
+        .main-container h1 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .stats-section {
+            margin-bottom: 30px;
+        }
+        .stats-section h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.08); /* Slightly more opaque */
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            margin-bottom: 15px; /* Increased spacing */
+            font-size: 1.1em;
+            border-left: 4px solid var(--accent-color); /* Accent border */
+        }
+        .stat-item strong {
+            /* color: var(--accent-color); */ /* Already applied to number, keep text normal */
+            font-weight: 600; /* Make the label bold */
+        }
+        #totalUsersCount {
+            color: var(--accent-color); /* Make the number pop */
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px; /* Increased padding */
+            background-color: rgba(0,0,0,0.2);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9em;
+            color: var(--text-color);
+            margin-top: auto; /* Pushes footer to bottom */
+        }
+
+        /* Loader and Error Styles (Book/Page-Flip) */
+        .loading {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            color: var(--text-color);
+            width: 100%;
+            margin: 20px 0;
+        }
+        .loading.active {
+            display: flex; /* Shown when active */
+        }
+        .book {
+            --page-color: var(--loader-page-color);
+            --page-bg-color: var(--loader-page-bg);
+            position: relative;
+            width: 100px; /* Width of the book */
+            height: 70px; /* Height of the book */
+            perspective: 800px;
+            margin-bottom: 15px; /* Space between book and text */
+        }
+        .page {
+            position: absolute;
+            width: 50%; /* Each page is half the book width */
+            height: 100%;
+            background-color: var(--page-bg-color);
+            border: 1px solid var(--page-color);
+            transform-origin: left center; /* Hinge on the left */
+            animation: flip 1.2s infinite linear;
+        }
+        .page:nth-child(1) { animation-delay: 0s; }
+        .page:nth-child(2) { animation-delay: 0.2s; } /* Staggered animation */
+        .page:nth-child(3) { animation-delay: 0.4s; }
+        .page:nth-child(4) { animation-delay: 0.6s; }
+        @keyframes flip {
+            0% { transform: rotateY(0deg); }
+            20% { transform: rotateY(-180deg); } /* Page flips over */
+            40% { transform: rotateY(-180deg); opacity: 1; } /* Stays flipped */
+            60% { transform: rotateY(-180deg); opacity: 0; } /* Fades out while flipped */
+            100% { transform: rotateY(0deg); opacity: 0; } /* Resets for next loop, invisible */
+        }
+        .loading span {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: var(--accent-color);
+            background-color: rgba(233, 69, 96, 0.1); /* Light red background */
+            border: 1px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px auto;
+            text-align: center;
+            max-width: 80%;
+        }
+        .error-message.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <header class="header">
+        <a href="/anime.html" class="logo">
+            <img src="/media/logo.svg" alt="Aniplix Logo" class="logo-icon">
+            <span class="logo-text">Aniplix</span>
+        </a>
+        <div class="header-actions">
+             <a href="/anime.html" class="header-action-secondary-btn"><i class="fas fa-search"></i> Back to Search</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <h1>User Statistics</h1>
+
+        <div id="loader" class="loading">
+            <div class="book">
+                <div class="page"></div><div class="page"></div><div class="page"></div><div class="page"></div>
+            </div>
+            <span>Loading statistics...</span>
+        </div>
+        <div id="errorMessage" class="error-message hidden"></div>
+
+        <div class="stats-section" id="statsContent" style="display:none;">
+            <h2>Registration Data</h2>
+            <div class="stat-item">
+                <strong>Total Registered Users:</strong> <span id="totalUsersCount">N/A</span>
+            </div>
+            <!-- More stats can be added here if data becomes available -->
+            <!-- e.g., <div class="stat-item"><strong>Users Registered Today:</strong> <span id="usersTodayCount">N/A</span></div> -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        &copy; 2024 Aniplix. All rights reserved.
+    </footer>
+
+    <script>
+        // Client-side auth check
+        if (localStorage.getItem('isLoggedInAniplix') !== 'true') {
+            window.location.href = '/login.html';
+        }
+
+        const loader = document.getElementById('loader');
+        const errorMessageDiv = document.getElementById('errorMessage');
+        const statsContent = document.getElementById('statsContent');
+        const totalUsersCountEl = document.getElementById('totalUsersCount');
+
+        function displayError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+            statsContent.style.display = 'none';
+        }
+
+        function clearError() {
+            errorMessageDiv.classList.add('hidden');
+            errorMessageDiv.textContent = '';
+        }
+        
+        async function fetchStats() {
+            loader.classList.add('active');
+            statsContent.style.display = 'none';
+            clearError();
+            try {
+                const response = await fetch('/api/stats'); // GET request by default
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: 'Failed to fetch statistics. Server returned an unreadable error.' }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (data.totalUsers !== undefined) {
+                    totalUsersCountEl.textContent = data.totalUsers;
+                } else {
+                    totalUsersCountEl.textContent = "Data unavailable";
+                }
+                
+                // Example for future:
+                // if (data.usersRegisteredToday !== undefined) {
+                //    document.getElementById('usersTodayCount').textContent = data.usersRegisteredToday;
+                // }
+                statsContent.style.display = 'block';
+
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                displayError('Could not load statistics: ' + error.message);
+            } finally {
+                loader.classList.remove('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStats();
+        });
+    </script>
+</body>
+</html>
