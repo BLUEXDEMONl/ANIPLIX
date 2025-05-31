@@ -1,10 +1,11 @@
 const express = require('express');
-const axios = require('axios');
+const axios =require('axios');
 const path = require('path');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
+const stringSimilarity = require('string-similarity');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -151,7 +152,6 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/stats', async (req, res) => {
-    // In a real application, this endpoint should be secured.
     fs.readFile(DB_PATH, 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading db.json for stats:', err);
@@ -160,15 +160,7 @@ app.get('/api/stats', async (req, res) => {
         try {
             const db = JSON.parse(data);
             const totalUsers = db.users.length;
-            
-            // If user objects had a registrationDate, more stats could be generated:
-            // const today = new Date().toISOString().split('T')[0];
-            // const usersRegisteredToday = db.users.filter(user => user.registrationDate && user.registrationDate.startsWith(today)).length;
-            
-            res.status(200).json({
-                totalUsers,
-                // usersRegisteredToday // example
-            });
+            res.status(200).json({ totalUsers });
         } catch (parseError) {
             console.error('Error parsing db.json for stats:', parseError);
             return res.status(500).json({ message: 'Server error parsing user data' });
@@ -176,50 +168,49 @@ app.get('/api/stats', async (req, res) => {
     });
 });
 
-app.get('/api/search-anime', async (req, res) => {
-    const { animename, episode } = req.query;
-    if (!animename) {
-        return res.status(400).json({ message: 'Anime name is required' });
+// Endpoint for fetching specific episode links
+app.get('/api/get-episode-links', async (req, res) => {
+    const { animename, episode } = req.query; // animename is expected by txtorg-anihx
+    if (!animename || !episode) {
+        return res.status(400).json({ message: 'Anime name and episode number are required for fetching links.' });
     }
-    const effectiveEpisode = episode || "1"; // Default to episode 1 if not provided
-    const externalApiUrl = `https://txtorg-anihx.hf.space/api/episode?anime=${encodeURIComponent(animename)}&ep=${encodeURIComponent(effectiveEpisode)}`;
-    console.log(`Attempting to fetch from external API: ${externalApiUrl}`);
+    const externalApiUrl = `https://txtorg-anihx.hf.space/api/episode?anime=${encodeURIComponent(animename)}&ep=${encodeURIComponent(episode)}`;
+    console.log(`Attempting to fetch episode links from external API: ${externalApiUrl}`);
     try {
         const apiResponse = await axios.get(externalApiUrl);
         if (typeof apiResponse.data !== 'object' || apiResponse.data === null) {
-            console.error('Unexpected response format from external API (not an object):', apiResponse.data);
-            return res.status(500).json({ message: 'Received invalid data format from anime API.' });
+            console.error('Unexpected response format from external episode links API (not an object):', apiResponse.data);
+            return res.status(500).json({ message: 'Received invalid data format from episode links API.' });
         }
-        // Check if the API returned a specific error message in its 200 OK response
         if (apiResponse.data.detail && typeof apiResponse.data.detail === 'string' && (!apiResponse.data.title || !apiResponse.data.links)) {
-            console.warn(`External API (200 OK) reported: ${apiResponse.data.detail} for ${animename} ep ${effectiveEpisode}`);
+            console.warn(`External episode links API (200 OK) reported: ${apiResponse.data.detail} for ${animename} ep ${episode}`);
             return res.status(404).json({ message: apiResponse.data.detail });
         }
-        // Ensure essential data (title and at least one link category) is present
         const subLinksExist = apiResponse.data.links && apiResponse.data.links.sub && Object.keys(apiResponse.data.links.sub).length > 0;
         const dubLinksExist = apiResponse.data.links && apiResponse.data.links.dub && Object.keys(apiResponse.data.links.dub).length > 0;
 
         if (!apiResponse.data.title || !(subLinksExist || dubLinksExist)) {
-             console.warn('Unexpected response structure from external API (200 OK, but critical data missing):', apiResponse.data);
-             return res.status(404).json({ message: `Anime "${animename}" episode ${effectiveEpisode} not found or no download links available.` });
+             console.warn('Unexpected response structure from external episode links API (200 OK, but critical data missing):', apiResponse.data);
+             return res.status(404).json({ message: `Anime "${animename}" episode ${episode} not found or no download links available.` });
         }
         res.json(apiResponse.data);
     } catch (error) {
-        console.error(`Error in /api/search-anime proxy request for animename: ${animename}, episode: ${effectiveEpisode}:`);
+        console.error(`Error in /api/get-episode-links for animename: ${animename}, episode: ${episode}:`);
         if (error.response) {
-            console.error('External API - Status:', error.response.status);
-            console.error('External API - Data:', error.response.data);
-            const message = error.response.data?.detail || `Error from external anime API: Status ${error.response.status}`;
+            console.error('External Episode Links API - Status:', error.response.status);
+            console.error('External Episode Links API - Data:', error.response.data);
+            const message = error.response.data?.detail || `Error from external episode links API: Status ${error.response.status}`;
             return res.status(error.response.status || 500).json({ message });
         } else if (error.request) {
-            console.error('External API - No response received:', error.request);
-            return res.status(503).json({ message: 'Service unavailable: No response from the external anime service.' });
+            console.error('External Episode Links API - No response received:', error.request);
+            return res.status(503).json({ message: 'Service unavailable: No response from the external episode links service.' });
         } else {
             console.error('Axios request setup error:', error.message);
-            return res.status(500).json({ message: 'Internal server error: Failed to set up anime search request.' });
+            return res.status(500).json({ message: 'Internal server error: Failed to set up episode links request.' });
         }
     }
 });
+
 
 app.get('/api/image-proxy', async (req, res) => {
     const imageUrl = req.query.url;
@@ -231,14 +222,15 @@ app.get('/api/image-proxy', async (req, res) => {
     try {
         const response = await axios.get(imageUrl, {
             responseType: 'arraybuffer',
-            // It's often better not to send a specific referer unless absolutely necessary
-            // headers: { 'Referer': 'https://animeheaven.me/' }
+            headers: { // Added User-Agent to image proxy as well for consistency
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Referer': 'https://animeheaven.me/' // Common referer for AnimeHeaven images
+            }
         });
         const contentType = response.headers['content-type'];
         if (contentType) {
             res.setHeader('Content-Type', contentType);
         } else {
-            // Fallback if content-type is missing (less common for images)
             if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) {
                 res.setHeader('Content-Type', 'image/jpeg');
             } else if (imageUrl.endsWith('.png')) {
@@ -246,7 +238,6 @@ app.get('/api/image-proxy', async (req, res) => {
             } else if (imageUrl.endsWith('.gif')) {
                 res.setHeader('Content-Type', 'image/gif');
             }
-            // Add more as needed or have a default like 'application/octet-stream'
         }
         res.send(response.data);
     } catch (error) {
@@ -271,19 +262,14 @@ app.get('/api/random-anime', async (req, res) => {
         console.log(`Attempting to scrape random anime from: ${scrapeUrl}`);
         const response = await axios.get(scrapeUrl, {
             headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' },
-            maxRedirects: 5 // Allow redirects as random.php often redirects
+            maxRedirects: 5 
         });
 
-        // AnimeHeaven's random.php redirects to the actual anime page.
-        // The final URL after redirects is what we need to scrape.
-        const finalUrl = response.request.res.responseUrl || scrapeUrl; // Get URL after redirects
+        const finalUrl = response.request.res.responseUrl || scrapeUrl;
         console.log(`Scraping random anime, final URL after redirects: ${finalUrl}`);
 
-        // Sometimes, the initial response to random.php is short, and we need to fetch the final URL content again.
-        // We can also check if the content looks like a detail page.
         let htmlData = response.data;
         if (response.data.length < 1000 && finalUrl !== scrapeUrl && !response.data.includes('infotitle c')) {
-             // If initial data is too short and we were redirected, fetch the final URL's content
              const finalResponse = await axios.get(finalUrl, {
                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' },
              });
@@ -296,18 +282,17 @@ app.get('/api/random-anime', async (req, res) => {
         const summary = $('div.infodes.c').text().trim();
         
         let poster = $('img.posterimg').attr('src');
-        let fullPoster = ''; // Default to empty, placeholder handled on frontend
+        let fullPoster = ''; 
         if (poster) {
             fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
         } else {
-             // Fallback selector if posterimg is not found
              poster = $('div.ani_detail_img_contain_bottom_left_img_out').find('img').attr('src') || $('meta[property="og:image"]').attr('content');
              if(poster){
                 fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
              }
         }
 
-        const infoDivs = $('div.infoyear.c div.inline.c2'); // More specific selector
+        const infoDivs = $('div.infoyear.c div.inline.c2');
         const episodes = $(infoDivs[0]).text().trim() || 'N/A';
         const year = $(infoDivs[1]).text().trim() || 'N/A';
         const rating = $(infoDivs[2]).text().trim() || 'N/A';
@@ -317,7 +302,7 @@ app.get('/api/random-anime', async (req, res) => {
             tags.push($(el).text().trim());
         });
 
-        if (!englishName && !summary && !fullPoster) { // Check if essential details are missing
+        if (!englishName && !summary && !fullPoster) {
             console.error('Failed to scrape essential anime details from AnimeHeaven.', { finalUrl, htmlLength: htmlData.length });
             return res.status(500).json({ message: 'Failed to scrape anime details. The page structure might have changed or no details were found. Please try again.' });
         }
@@ -326,7 +311,7 @@ app.get('/api/random-anime', async (req, res) => {
             englishName: englishName || "Title not found",
             japaneseName,
             summary: summary || "Summary not available.",
-            poster: fullPoster, // Can be empty if not found, frontend handles placeholder
+            poster: fullPoster,
             episodes,
             year,
             rating,
@@ -361,12 +346,11 @@ app.get('/api/new-anime', async (req, res) => {
             const japaneseName = $(el).find('.charttitlejp').text().trim() || 'Not available';
             const time = $(el).find('.charttimer.c2').text().trim();
             
-            // Extract ID and full link for navigation to detail page
-            const href = $(el).find('.charttitle a').attr('href'); // e.g. anime.php?9pmqb
-            const id = href?.split('?')[1] || 'unknown'; // Extract just the ID part
-            const animeLink = `https://animeheaven.me/anime.php?${id}`; // Construct full link
+            const href = $(el).find('.charttitle a').attr('href');
+            const id = href?.split('?')[1] || 'unknown';
+            const animeLink = `https://animeheaven.me/anime.php?${id}`;
 
-            let imageUrl = 'https://placehold.co/300x170.png'; // Default placeholder
+            let imageUrl = 'https://placehold.co/300x170.png'; 
             if (imagePath) {
                 if (imagePath.startsWith('http')) {
                     imageUrl = imagePath;
@@ -375,10 +359,10 @@ app.get('/api/new-anime', async (req, res) => {
                 }
             }
 
-            if (englishName) { // Only add if an English name exists
+            if (englishName) {
                  animeList.push({
-                    id, // Include the ID
-                    link: animeLink, // Include the full link
+                    id,
+                    link: animeLink,
                     image: imageUrl,
                     englishName,
                     japaneseName,
@@ -407,7 +391,7 @@ app.get('/api/new-anime', async (req, res) => {
 });
 
 app.get('/api/anime-details', async (req, res) => {
-    const animeUrl = req.query.url; // Expecting full URL like https://animeheaven.me/anime.php?ID_HERE
+    const animeUrl = req.query.url;
     if (!animeUrl) {
         return res.status(400).json({ message: 'Anime URL is required' });
     }
@@ -424,11 +408,10 @@ app.get('/api/anime-details', async (req, res) => {
         const summary = $('div.infodes.c').text().trim();
         
         let poster = $('img.posterimg').attr('src');
-         let fullPoster = 'https://placehold.co/300x450.png'; // Default placeholder for detail view
+         let fullPoster = 'https://placehold.co/300x450.png';
         if (poster) {
             fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
         } else {
-             // Fallback selector if posterimg is not found
              poster = $('div.ani_detail_img_contain_bottom_left_img_out').find('img').attr('src') || $('meta[property="og:image"]').attr('content');
              if(poster){
                 fullPoster = poster.startsWith('http') ? poster : (poster.startsWith('/') ? `https://animeheaven.me${poster}` : `https://animeheaven.me/${poster}`);
@@ -436,7 +419,7 @@ app.get('/api/anime-details', async (req, res) => {
         }
 
         const infoDivs = $('div.infoyear.c div.inline.c2');
-        const episodes = $(infoDivs[0]).text().trim() || 'N/A';
+        const episodes = $(infoDivs[0]).text().trim() || 'N/A'; // e.g., "24" or "24 Episodes"
         const year = $(infoDivs[1]).text().trim() || 'N/A';
         const rating = $(infoDivs[2]).text().trim() || 'N/A';
 
@@ -445,7 +428,7 @@ app.get('/api/anime-details', async (req, res) => {
             tags.push($(el).text().trim());
         });
 
-        if (!englishName && !summary && !fullPoster.includes('animeheaven.me')) { // If essential details are missing and poster isn't from AH
+        if (!englishName && !summary && !fullPoster.includes('animeheaven.me') && fullPoster !== 'https://placehold.co/300x450.png') { // Adjusted condition
             console.error('Failed to scrape essential anime details from AnimeHeaven.', { animeUrl });
             return res.status(500).json({ message: 'Failed to scrape anime details. The page structure might have changed or no details were found.' });
         }
@@ -455,10 +438,10 @@ app.get('/api/anime-details', async (req, res) => {
             japaneseName,
             summary: summary || "Summary not available.",
             poster: fullPoster,
-            episodes,
+            episodes, // Send as string, frontend will parse
             year,
             rating,
-            tags: tags.length > 0 ? tags : ["N/A"] // Ensure tags is always an array
+            tags: tags.length > 0 ? tags : ["N/A"]
         });
 
     } catch (error) {
@@ -491,34 +474,33 @@ app.get('/api/anime-suggestions', async (req, res) => {
         const $ = cheerio.load(response.data);
         const allPopularAnime = [];
 
-        $('.chart').each((_, el) => { // Iterate over each popular anime chart item
-            const imagePath = $(el).find('.chartimg img.coverimg').attr('src'); // Path like 'covers/hunter-x-hunter-2011.jpg'
-            let imageUrl = 'https://placehold.co/180x250.png'; // Default placeholder
+        $('.chart').each((_, el) => { 
+            const imagePath = $(el).find('.chartimg img.coverimg').attr('src');
+            let imageUrl = 'https://placehold.co/180x250.png'; 
             if (imagePath) {
                  imageUrl = `https://animeheaven.me/${imagePath.startsWith('/') ? imagePath.substring(1) : imagePath}`;
             }
             
-            // Try to get English name first from charttitle, then Japanese from charttitlejp
             const englishNameAnchor = $(el).find('.charttitle a');
             let englishName = englishNameAnchor.text().trim();
-            if (!englishName) { // Fallback if <a> tag is not present or empty
+            if (!englishName) {
                 englishName = $(el).find('.charttitle').text().trim();
             }
-            englishName = englishName || 'Name not available'; // Ensure a value
+            englishName = englishName || 'Name not available';
 
-            const japaneseName = $(el).find('.charttitlejp').text().trim() || 'N/A'; // Japanese name fallback
+            const japaneseName = $(el).find('.charttitlejp').text().trim() || 'N/A';
             
-            const href = $(el).find('.chartimg a').attr('href'); // Path like 'anime.php?hunter-x-hunter-2011'
-            let animeLink = '#'; // Default link
+            const href = $(el).find('.chartimg a').attr('href');
+            let animeLink = '#';
             if (href) {
                 animeLink = `https://animeheaven.me/${href.startsWith('/') ? href.substring(1) : href}`;
             }
 
-            if (englishName !== 'Name not available' && animeLink !== '#') { // Only add if we have a name and a link
+            if (englishName !== 'Name not available' && animeLink !== '#') {
                  allPopularAnime.push({
                     image: imageUrl,
-                    englishName: englishName, // Use English name
-                    japaneseName: japaneseName, // Keep Japanese name for potential future use or display
+                    englishName: englishName,
+                    japaneseName: japaneseName,
                     link: animeLink
                 });
             }
@@ -529,18 +511,16 @@ app.get('/api/anime-suggestions', async (req, res) => {
             return res.status(404).json({ message: 'Could not fetch popular anime suggestions at this time.' });
         }
 
-        // Shuffle the array and pick the first 4
         const selectedSuggestions = [];
-        const shuffled = allPopularAnime.sort(() => 0.5 - Math.random()); // Simple shuffle
-        selectedSuggestions.push(...shuffled.slice(0, Math.min(4, shuffled.length))); // Take up to 4
+        const shuffled = allPopularAnime.sort(() => 0.5 - Math.random());
+        selectedSuggestions.push(...shuffled.slice(0, Math.min(4, shuffled.length)));
         
         cachedSuggestions = selectedSuggestions;
         suggestionsCacheTimestamp = now;
         console.log(`Successfully scraped and cached ${selectedSuggestions.length} anime suggestions.`);
         res.json(selectedSuggestions);
 
-    } catch (error)
- {
+    } catch (error) {
         console.error('Error in /api/anime-suggestions endpoint:', error.message);
         if (error.response) {
              console.error('Error response data (suggestions):', error.response.data ? String(error.response.data).substring(0, 200) + '...' : 'No response data');
@@ -574,7 +554,6 @@ app.get('/api/resolve-download-link', async (req, res) => {
             });
         } else {
             console.warn(`Failed to resolve or no links found for ${paheWinUrl}. API Response:`, apiResponse.data);
-            // It's possible the resolver returns 200 OK but with an error message or no links
             res.status(404).json({ message: 'Could not resolve download links or no links found.' });
         }
     } catch (error) {
@@ -594,6 +573,75 @@ app.get('/api/resolve-download-link', async (req, res) => {
     }
 });
 
+app.get('/api/suggest-anime', async (req, res) => {
+    const searchTerm = req.query.searchTerm;
+    if (!searchTerm) {
+        return res.status(400).json({ message: 'Search term is required' });
+    }
+
+    const scrapeUrl = `https://animeheaven.me/search.php?s=${encodeURIComponent(searchTerm)}`;
+    const baseUrl = 'https://animeheaven.me/';
+    console.log(`Attempting to scrape AnimeHeaven for suggestions: ${scrapeUrl}`);
+
+    try {
+        const response = await axios.get(scrapeUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+
+        const $ = cheerio.load(response.data);
+        let results = [];
+
+        $('.similarimg').each((i, el) => {
+            const imgElement = $(el).find('img.coverimg');
+            const anchorElement = $(el).find('a.c');
+
+            const name = anchorElement.text().trim();
+            const href = anchorElement.attr('href');
+            // const id = href?.split('anime.php?')[1] || null; // Not strictly needed if link is primary key
+            const fullLink = href ? (href.startsWith('http') ? href : baseUrl + (href.startsWith('/') ? href.substring(1) : href )) : '#';
+            
+            let imgSrc = imgElement.attr('src');
+            if (imgSrc && !imgSrc.startsWith('http')) {
+                imgSrc = baseUrl + (imgSrc.startsWith('/') ? imgSrc.substring(1) : imgSrc);
+            } else if (!imgSrc) {
+                imgSrc = 'https://placehold.co/100x150.png'; 
+            }
+
+            if (name && fullLink !== '#') { 
+                results.push({
+                    // id: id, // using fullLink as the key identifier for /api/anime-details
+                    name: name,
+                    link: fullLink, // This link will be used for /api/anime-details
+                    image: imgSrc
+                });
+            }
+        });
+
+        if (results.length > 0 && searchTerm) {
+            results = results
+                .map(item => ({
+                    ...item,
+                    similarity: stringSimilarity.compareTwoStrings(item.name.toLowerCase(), searchTerm.toLowerCase())
+                }))
+                .sort((a, b) => b.similarity - a.similarity)
+                .map(({ similarity, ...rest }) => rest); 
+        }
+        
+        console.log(`Found ${results.length} suggestions for "${searchTerm}" from AnimeHeaven (for initial search list).`);
+        res.json(results);
+
+    } catch (error) {
+        console.error(`Error in /api/suggest-anime (AnimeHeaven scraper) for term "${searchTerm}":`, error.message);
+        if (error.response) {
+            console.error('AnimeHeaven Scraper - Status:', error.response.status);
+            console.error('AnimeHeaven Scraper - Data:', error.response.data ? String(error.response.data).substring(0,100) : "N/A");
+        }
+        res.status(500).json({ message: 'Server error while fetching anime suggestions.' });
+    }
+});
+
 
 // Catch-all for 404 errors - must be after all other routes
 app.use((req, res, next) => {
@@ -602,13 +650,17 @@ app.use((req, res, next) => {
 
 // General error handler - must be the last app.use()
 app.use((err, req, res, next) => {
-    console.error("Unhandled error:", err); // Log the full error for server-side debugging
-    if (req.originalUrl.startsWith('/api/')) { // Check if the request was for an API endpoint
+    console.error("Unhandled error:", err); 
+    if (req.originalUrl.startsWith('/api/')) { 
         res.status(500).json({ message: 'Internal Server Error. Please try again later.' });
     } else {
-        // For non-API requests, you might want to send a generic HTML error page
-        // For now, sending simple text/HTML
-        res.status(500).send('<h1>Internal Server Error</h1><p>Sorry, something went wrong. Please try again later.</p>');
+        // Send a more user-friendly HTML error page for non-API routes
+        const errorPagePath = path.join(__dirname, 'public', '500.html'); 
+        if (fs.existsSync(errorPagePath)) {
+            res.status(500).sendFile(errorPagePath);
+        } else {
+            res.status(500).send('<h1>Internal Server Error</h1><p>Sorry, something went wrong. Please try again later.</p>');
+        }
     }
 });
 
@@ -619,3 +671,4 @@ initializeDatabase().then(() => {
 }).catch(err => {
     console.error("Failed to initialize database and start server:", err);
 });
+
